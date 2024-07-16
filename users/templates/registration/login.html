@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+    <section class="container flex-c text-center">
+
+        <form class="login" method="post">
+            {% csrf_token %}
+            <h2>Login</h2>
+            <div class="form-holder flex-col">
+                
+                <input type="text" name="Username" placeholder="Username">
+                <input type="password" name="password" placeholder="password">
+                
+            </div>
+
+            <button class="round pointer" type="submit" value="login">Login</button>
+            <p class="signup">Don't have an account yet?</p>
+            <a class="no-deco" href="/signup">Sign up</a>
+        </form>
+    </section>
+
+{% endblock %}

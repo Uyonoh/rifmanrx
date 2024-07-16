@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+    {% block styles %}
+    {% endblock %}
+
+    <title>Rifman RX</title>
+</head>
+<body>
+
+    <header class="container flex">
+        <div class="logo">
+            <h2><a class="no-deco" href="/">RIFMAN RX</a></h2>
+        </div>
+
+        <nav class="center">
+            <ul class="flex no-style no-deco">
+                <li><a href="/">Home</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/about">About Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="sideicons flex">
+            <a href="{% url 'users:login' %}"><img src="{% static 'main/assets/svg/box-arrow-in-right.svg' %}" alt=""></a>
+            <img id="side-toggle" class="pointer" src="{% static 'main/assets/svg/chevron-down.svg' %}" alt="">
+        </div>
+
+        <nav class="sidebar flex-col hidden">
+            <p class="flex"><span class="close pointer">x</span></p>
+             <div class="search flex">
+                 <input type="search" name="search" placeholder="Search Drugs">
+                 <img src="{% static 'main/assets/svg/chevron-right.svg' %}" alt="" height="30">
+             </div>
+             <hr />
+ 
+             <ul class="flex-col no-style no-deco">
+                 <li><a href="#">Item</a></li>
+                 <li><a href="#">Item</a></li>
+                 <li><a href="#">Item</a></li>
+                 <li><a href="#">Item</a></li>
+             </ul>
+         </nav>
+    </header>
+    
+
+    {% block unknown %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+
+    <footer>
+        © Uyonoh, 2024
+    </footer>
+    <script src="{% static 'main/scripts/script.js' %}"></script>
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

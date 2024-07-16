@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'main.apps.MainConfig',
     'users.apps.UsersConfig',
+    'drugs.apps.DrugsConfig',
 ]
 
 MIDDLEWARE = [

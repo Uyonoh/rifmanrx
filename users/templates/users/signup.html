@@ -8,9 +8,9 @@
 {% block content %}
     <section class="container flex-c text-center">
 
-        <form class="login" method="post">
+        <form class="signup login" action="{% url 'users:login' %}" method="post">
             {% csrf_token %}
-            <h2>Login</h2>
+            <h2>Sign up</h2>
             <div class="form-holder flex-col">
                 
                 <input type="text" name="username" placeholder="Username" id="id_username" required>
@@ -18,9 +18,7 @@
                 
             </div>
 
-            <button class="round pointer" type="submit" value="login">Login</button>
-            <p class="signup">Don't have an account yet?</p>
-            <a class="no-deco" href="{% url 'users:signup' %}">Sign up</a>
+            <button class="round pointer" type="submit" value="login">Sign up</button>
         </form>
     </section>
 

@@ -8,17 +8,22 @@
 {% block content %}
     <section class="container flex-c text-center">
 
-        <form class="signup login" action="{% url 'users:login' %}" method="post">
+        <form class="signup login" action="{% url 'users:signup' %}" method="post">
             {% csrf_token %}
             <h2>Sign up</h2>
             <div class="form-holder flex-col">
-                
+                <div class="flex-col">
+                    <input type="text" name="first_name" id=""  placeholder="First Name">
+                    <input type="text" name="last_name"  id="" placeholder="Last Name">
+                </div>
                 <input type="text" name="username" placeholder="Username" id="id_username" required>
-                <input type="password" name="password" placeholder="password" id="id_password" required>
+                <input type="text" name="password" placeholder="password" id="id_password" required>
                 
             </div>
 
             <button class="round pointer" type="submit" value="login">Sign up</button>
+            <p class="signup">Already have an account yet?</p>
+            <a class="no-deco" href="{% url 'users:login' %}">Login</a>
         </form>
     </section>
 

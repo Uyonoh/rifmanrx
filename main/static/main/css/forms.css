@@ -37,6 +37,10 @@ form.login {
     gap: 2rem;
 }
 
+input {
+    background-color: #efefef;
+}
+
 .item {
     /* width: auto; */
     display: inline-flex;

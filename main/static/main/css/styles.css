@@ -91,6 +91,11 @@ nav.sidebar {
     } */
 }
 
+.svg.white {
+    width: 20px;
+    filter: invert(87%) sepia(12%) saturate(851%) hue-rotate(196deg) brightness(105%) contrast(98%);
+}
+
 p.flex {
     justify-content: flex-end;
     width: 100%;

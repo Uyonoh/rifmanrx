@@ -6,7 +6,18 @@
 {% endblock %}
 
 {% block content %}
-    <section class="container flex-c text-center">
+    <section class="container flex-col text-center">
+        {% if form.errors %}
+        <div class="error">
+            <ul class="errs no-style">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <li class="err"> {{ error }} </li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
         <form class="signup login" action="{% url 'users:signup' %}" method="post">
             {% csrf_token %}

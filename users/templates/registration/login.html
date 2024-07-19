@@ -6,7 +6,16 @@
 {% endblock %}
 
 {% block content %}
-    <section class="container flex-c text-center">
+    <section class="container flex-col text-center">
+        <div class="error">
+            <ul class="errs no-style">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <li class="err"> {{ error }} </li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        </div>
 
         <form class="login" method="post">
             {% csrf_token %}

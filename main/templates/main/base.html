@@ -27,15 +27,15 @@
         </nav>
 
         <div class="sideicons flex">
-            <a href="{% url 'users:login' %}"><img src="{% static 'main/assets/svg/box-arrow-in-right.svg' %}" alt=""></a>
-            <img id="side-toggle" class="pointer" src="{% static 'main/assets/svg/chevron-down.svg' %}" alt="">
+            <a href="{% url 'users:profile' %}"><img class="svg white" src="{% static 'main/assets/svg/circle-user.svg' %}" alt=""></a>
+            <img id="side-toggle" class="svg white pointer" src="{% static 'main/assets/svg/menu-burger.svg' %}" alt="">
         </div>
 
         <nav class="sidebar flex-col hidden">
             <p class="flex"><span class="close pointer">x</span></p>
              <div class="search flex">
                  <input type="search" name="search" placeholder="Search Drugs">
-                 <img src="{% static 'main/assets/svg/chevron-right.svg' %}" alt="" height="30">
+                 <img class="svg white" src="{% static 'main/assets/svg/chevron-right.svg' %}" alt="" height="30">
              </div>
              <hr />
  

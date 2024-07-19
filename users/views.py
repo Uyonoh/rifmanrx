@@ -33,7 +33,12 @@ def signup(request):
 
 def profile(request):
     user = get_user(request)
+    
     if isinstance(user, AnonymousUser):
         return HttpResponseRedirect(reverse("users:login"))
     else:
-        return render(request, "users/profile.html", {})
+        user_dict = user.__dict__.copy()
+        del user_dict["_state"]
+        del user_dict["is_active"]
+        del user_dict["password"]
+        return render(request, "users/profile.html", {"user": user_dict})

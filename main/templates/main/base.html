@@ -32,10 +32,12 @@
         </div>
 
         <nav class="sidebar flex-col hidden">
-            <p class="flex"><span class="close pointer">x</span></p>
+            <p class="flex"><span class="close pointer">
+                <img class="svg close" src="{% static 'main/assets/svg/circle-xmark.svg' %}" alt="">
+            </span></p>
              <div class="search flex">
                  <input type="search" name="search" placeholder="Search Drugs">
-                 <img class="svg white" src="{% static 'main/assets/svg/chevron-right.svg' %}" alt="" height="30">
+                 <img class="svg search pointer" src="{% static 'main/assets/svg/search.svg' %}" alt="">
              </div>
              <hr />
  

@@ -181,9 +181,14 @@ footer {
 
 @media(max-width: 650px) {
 
+    .container {
+        padding: .1rem .7rem;
+    }
+
     header > nav {
         display: none;
     }
+
 
     nav.sidebar {
         min-width: 80vw;

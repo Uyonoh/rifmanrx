@@ -74,6 +74,10 @@ header {
     }
 }
 
+.nav-hidden {
+    display: none;
+}
+
 nav.sidebar {
     position: absolute;
     top: 70px;
@@ -193,6 +197,10 @@ footer {
     nav.sidebar {
         min-width: 80vw;
         min-height: 90vh;
+    }
+
+    .nav-hidden {
+        display: block;
     }
 
     .grid, .flex.m {

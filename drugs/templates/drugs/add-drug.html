@@ -1,0 +1,63 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="container flex-c text-center">
+
+    <form class="add" action="{% url 'drugs:add' %} method="post">
+        <h1>Add Drug</h1>
+        <div class="form-holder grid-2">
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+
+            <div class="item">
+                <label for="">Item</label>
+                <input type="text" name="" id="">
+            </div>
+        </div>
+
+        <button class="round pointer" type="submit">Add</button>
+    </form>
+</section>
+{% endblock %}

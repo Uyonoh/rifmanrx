@@ -42,10 +42,13 @@
              <hr />
  
              <ul class="flex-col no-style no-deco">
+                 <li><a href="{% url 'drugs:view' %}">View Drugs</a></li>
+                 <li><a href="{% url 'drugs:add' %}">Add Drugs</a></li>
+                 <li><a href="#">Consult</a></li>
                  <li><a href="#">Item</a></li>
-                 <li><a href="#">Item</a></li>
-                 <li><a href="#">Item</a></li>
-                 <li><a href="#">Item</a></li>
+
+                 <li class="nav-hidden"><a href="/contact">contact Us</a></li>
+                 <li class="nav-hidden"><a href="/about">About Us</a></li>
              </ul>
          </nav>
     </header>

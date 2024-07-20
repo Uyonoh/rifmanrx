@@ -39,6 +39,7 @@ form.login {
 
 input {
     background-color: #efefef;
+    border-radius: 5px;
 }
 
 .item {

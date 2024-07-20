@@ -134,7 +134,7 @@ class Drug(models.Model):
             raise ValueError(f"amount {amount} greater than stock amount")
     
     @property
-    def Tablet(self) -> Tablet:
+    def Tablet(self) -> models.Model:
         """ Gets the tablet assossiated with the drug 
         
         There should only be one"""
@@ -144,13 +144,13 @@ class Drug(models.Model):
         return self.tablet_set.all()[0]
 
     @property
-    def Suspension(self) -> Suspension:
+    def Suspension(self) -> models.Model:
         """ Gets the suspension assossiated with the drug """
         
         return self.suspension_set.all()[0]
 
     @property
-    def Injectible(self) -> Injectible:
+    def Injectible(self) -> models.Model:
         """ Gets the suspension assossiated with the drug """
 
         return self.injectible_set.all()[0]

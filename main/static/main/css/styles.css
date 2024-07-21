@@ -118,7 +118,7 @@ p.flex {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .pointer:hover {

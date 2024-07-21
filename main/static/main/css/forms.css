@@ -36,7 +36,7 @@ form.login {
     gap: 2rem;
 }
 
-input {
+input, select {
     background-color: #efefef;
     border: 1px solid #000;
     border-radius: 5px;
@@ -48,7 +48,7 @@ input {
     gap: 1rem;
 }
 
-input {
+input, select {
     width: 300px;
     height: 1.5rem;
 }
@@ -83,6 +83,22 @@ button.round{
     padding-bottom: 7px;
 }
 
+.django-form div {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+
+    label {
+        display: inline;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    input, select {
+        grid-column-start: 3;
+        grid-column-end: 7;
+    }
+}
+
 @media(max-width: 700px) {
     .grid-2 {
         display: grid;
@@ -94,7 +110,7 @@ button.round{
         padding: 1rem ;
     }
 
-    input {
-        width: 250px;
+    input, select {
+        width: auto;
     }
 }

@@ -1,9 +1,22 @@
 {% extends "main/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+{% endblock %}
 
 {% block content %}
+<section class="container flex-c text-center">
 
-<section class="container flex-col">
-    Nothing to show
+    <form class="add" action="{% url 'drugs:add' %}" method="post">
+        {% csrf_token %}
+        <h1>Drugs</h1>
+        
+        {% for drug in drugs %}
+        <p> {{drug.name}} </p>
+        {% endfor %}
+
+        <button class="round pointer" type="submit">Add</button>
+    </form>
 </section>
-
 {% endblock %}

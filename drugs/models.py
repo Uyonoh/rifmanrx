@@ -95,7 +95,7 @@ class Drug(models.Model):
         return self.check_exp() <= 0
     
     @property
-    def expire_soon(self, days: int) -> bool:
+    def expire_soon(self, days: int=60) -> bool:
         """ Check if drug is soon to expire.
 
         Args:
@@ -104,6 +104,18 @@ class Drug(models.Model):
            """
         
         return self.check_exp() <= days
+    
+    @property
+    def exp_class(self) -> str:
+        """ Returns a string to be used as a class for viewing drugs in a table """
+
+        if self.expired:
+            return "expired"
+        
+        if self.expire_soon:
+            return "exp-soon"
+        
+        return "exp-far"
     
     def get_unit(self) -> str:
         """ Get the base purchase unit of the drug """
@@ -143,12 +155,16 @@ class Drug(models.Model):
         self.validate_stock_amount(amount)
         self.save(first_stock=False, sale=True)
 
+    def table_head(self) -> tuple:
+        return ("name", "brand name", "state", "mass", "manufacturer", "Expirery date", "stock", "price",
+                "category", "purpose", "location", "day added", "Out of stock", "expired")
+
     def tabulate(self) -> tuple:
         """ Returns a tuple of some drug attributes to be used a table """
 
-        return (self.drug_name, self.brand_name, self.drug_type, self.state, self.weight,
-			self.manufacturer, self.exp_date, self.clean_stock(), self.price, self.category, self.purpose,
-			self.location, self.day_added, self.out_of_stock, self.expired)
+        return (self.name, self.brand_name, self.state, self.mass,
+			    self.manufacturer, self.exp_date, self.clean_stock(), self.price, self.category, self.purpose,
+			    self.location, self.day_added, self.oos, self.expired)
     
     def validate_stock_amount(self, amount: int=0) -> None:
         """ Ensure stock amount is not less than zero """

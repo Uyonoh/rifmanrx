@@ -7,7 +7,9 @@ from .forms import DrugForm
 # Create your views here.
 
 def view_drugs(request):
-    return render(request, "drugs/view-drugs.html", {"drugs": Drug.objects.all()})
+    drugs = list(Drug.objects.all())
+    print(drugs)
+    return render(request, "drugs/view-drugs.html", {"drugs": drugs})
 
 
 # state_dict = {"Tab": "Tablet", "Suspension": "Suspension", "Injectible": "Injectible"}

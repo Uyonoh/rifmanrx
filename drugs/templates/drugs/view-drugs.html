@@ -11,12 +11,25 @@
     <form class="add" action="{% url 'drugs:add' %}" method="post">
         {% csrf_token %}
         <h1>Drugs</h1>
-        
-        {% for drug in drugs %}
-        <p> {{drug.name}} </p>
-        {% endfor %}
 
-        <button class="round pointer" type="submit">Add</button>
+        <table class="drugs">
+            <thead>
+                {% for head in drugs.0.table_head %}
+                <th>{{head.upper}}</th>
+                {% endfor %}
+            </thead>
+            {% for drug in drugs %}
+            <tr class="drug {{drug.exp_class}}">
+            {% for field in drug.tabulate %}
+                <td class="drug-field">
+                    {{field}}
+                </td>    
+            {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+
+        <!-- <button class="round pointer" type="submit">Add</button> -->
     </form>
 </section>
 {% endblock %}

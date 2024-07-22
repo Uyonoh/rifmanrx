@@ -14,6 +14,12 @@ def view_drugs(request):
 
 # state_dict = {"Tab": "Tablet", "Suspension": "Suspension", "Injectible": "Injectible"}
 
+def view_drug(request, pk):
+
+    drug = Drug.objects.filter(pk=pk)[0]
+
+    return render(request, "drugs/view-drug.html", {"drug": drug})
+
 def add_tab(request, form: DrugForm, update: bool=False) -> None:
     """ Add a tablet drug """
 
@@ -39,13 +45,18 @@ def add_tab(request, form: DrugForm, update: bool=False) -> None:
             units=request.POST.get("purchase_units"),
             first_stock=False
             )
+        
+def add_sus(request, form: DrugForm, update: bool=False) -> None:
+    pass
 
+def add_inj(request, form: DrugForm, update: bool=False) -> None:
+    pass
 
-state_dict = {"Tab": add_tab, "Suspension": "Suspension", "Injectible": "Injectible"}
 
 def add_drug(request):
     """ Add a drug to the database """
 
+    state_dict = {"Tab": add_tab, "Suspension": add_sus, "Injectible": add_inj}
     if request.method == "POST":
         form = DrugForm(request.POST)
 
@@ -61,3 +72,13 @@ def add_drug(request):
     else:
         form = DrugForm()
     return render(request, "drugs/add-drug.html", {"form": form})
+
+def restock(request, pk):
+    form = DrugForm()
+    return render(request, "drugs/add-drug.html", {"form": form})
+
+def sell(request, pk):
+    return render(request, "drugs/sell.html", {"form": "form"})
+
+def edit(request, pk):
+    return render(request, "drugs/add.html", {"form": "form"})

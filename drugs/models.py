@@ -125,6 +125,10 @@ class Drug(models.Model):
         else:
             return "bottle(s)"
         
+    def itemize(self) -> list:
+
+        return list(zip(self.table_head(), self.tabulate()))
+        
     def relocate(self, new_location: str) -> None:
         """ Change location of drug """
 
@@ -157,14 +161,14 @@ class Drug(models.Model):
 
     def table_head(self) -> tuple:
         return ("name", "brand name", "state", "mass", "manufacturer", "Expirery date", "stock", "price",
-                "category", "purpose", "location", "day added", "Out of stock", "expired")
+                "category", "Out of stock", "expired")
 
     def tabulate(self) -> tuple:
         """ Returns a tuple of some drug attributes to be used a table """
 
         return (self.name, self.brand_name, self.state, self.mass,
-			    self.manufacturer, self.exp_date, self.clean_stock(), self.price, self.category, self.purpose,
-			    self.location, self.day_added, self.oos, self.expired)
+			    self.manufacturer, self.exp_date, self.clean_stock(), self.price, self.category,
+			    self.oos, self.expired)
     
     def validate_stock_amount(self, amount: int=0) -> None:
         """ Ensure stock amount is not less than zero """

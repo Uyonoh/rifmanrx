@@ -1,0 +1,56 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/tables.css' %}">
+
+<style>
+    .item.flex {
+        justify-content: flex-start;
+        align-items: flex-start;
+        text-align: left;
+        width: 300px;
+        border-bottom: 1px solid black;
+
+        .value {
+            width: 100%;
+            text-align: right;
+        }
+    }
+
+    .drug {
+        padding: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="container flex-col">
+    <div class="drug flex-col" id="{{drug.pk}}">
+        {% for label, value in drug.itemize %}
+        <div class="item flex">
+            <div class="label">
+                <b>{{label}}:</b>
+            </div>
+            <div class="value">
+                {{value}}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="submit">
+            <button class="submit sell round pointer" type="button">Sell</button>
+            <button class="submit restock round pointer" type="button">Restock</button>
+            <button class="submit edit round pointer" type="button">Edit</button>
+        </div>
+    </div>
+    
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'main/scripts/details.js' %}"></script>
+{% endblock %}

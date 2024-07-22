@@ -1,0 +1,47 @@
+section.table {
+    overflow: auto;
+}
+
+table, tr, th, td {
+	border: 1px solid #4a7420;
+}
+
+/* tr.exp-far {
+	background-color: green;
+	color: white;
+}
+
+tr.exp-soon {
+	background-color: orange;
+	color: white;
+
+}
+
+tr.expired {
+	background-color: red;
+	color: white;
+} */
+
+tr.exp-far td {
+	border: 1px solid #4a7420;
+	
+}
+
+tr.exp-soon td {
+	border: 1px solid rgb(255, 136, 0);
+	
+
+}
+
+tr.expired td {
+	border: 1px solid red;
+	
+}
+
+th {
+	padding: 10px;
+}
+
+td {
+	padding: 0 5px;
+}

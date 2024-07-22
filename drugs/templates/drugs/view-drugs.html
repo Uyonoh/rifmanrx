@@ -3,15 +3,20 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/tables.css' %}">
 {% endblock %}
 
 {% block content %}
-<section class="container flex-c text-center">
+<section class="container flex-col text-center">
 
     <form class="add" action="{% url 'drugs:add' %}" method="post">
         {% csrf_token %}
         <h1>Drugs</h1>
+        <p>Working on this</p>
+    </form>
+</section>
 
+<section class="container table">
         <table class="drugs">
             <thead>
                 {% for head in drugs.0.table_head %}
@@ -19,17 +24,24 @@
                 {% endfor %}
             </thead>
             {% for drug in drugs %}
-            <tr class="drug {{drug.exp_class}}">
+            <tr class="drug {{drug.exp_class}}" id="{{drug.pk}}">
             {% for field in drug.tabulate %}
                 <td class="drug-field">
                     {{field}}
                 </td>    
             {% endfor %}
+                <td class="mobile-only">
+                    <button class="view-drug rounded" id="{{drug.pk}}">View</button>
+                </td>
             </tr>
             {% endfor %}
         </table>
 
         <!-- <button class="round pointer" type="submit">Add</button> -->
-    </form>
+    
 </section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'main/scripts/tables.js' %}"></script>
 {% endblock %}

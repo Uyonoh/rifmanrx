@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="container flex-c text-center">
+
+    <form class="add" ction="{% url 'drugs:add' %}" method="post">
+        {% csrf_token %}
+        <h1>Sell Drug</h1>
+        
+
+        <button class="round pointer" type="submit">Sell</button>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'main/scripts/forms.js' %}"></script>
+{% endblock %}

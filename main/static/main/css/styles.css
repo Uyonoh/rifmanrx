@@ -74,6 +74,10 @@ header {
     }
 }
 
+.nav-hidden {
+    display: none;
+}
+
 nav.sidebar {
     position: absolute;
     top: 70px;
@@ -114,7 +118,7 @@ p.flex {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .pointer:hover {
@@ -179,6 +183,51 @@ footer {
     padding: 10px;
 }
 
+
+table, tr, th, td {
+	border: 1px solid #4a7420;
+}
+
+/* tr.exp-far {
+	background-color: green;
+	color: white;
+}
+
+tr.exp-soon {
+	background-color: orange;
+	color: white;
+
+}
+
+tr.expired {
+	background-color: red;
+	color: white;
+} */
+
+tr.exp-far td {
+	border: 1px solid #4a7420;
+	
+}
+
+tr.exp-soon td {
+	border: 1px solid rgb(255, 136, 0);
+	
+
+}
+
+tr.expired td {
+	border: 1px solid red;
+	
+}
+
+th {
+	padding: 10px;
+}
+
+td {
+	padding: 0 5px;
+}
+
 @media(max-width: 650px) {
 
     .container {
@@ -195,6 +244,10 @@ footer {
         min-height: 90vh;
     }
 
+    .nav-hidden {
+        display: block;
+    }
+
     .grid, .flex.m {
         display: block;
         text-align: center;
@@ -204,3 +257,4 @@ footer {
         border: 1px solid;
     }
 }
+

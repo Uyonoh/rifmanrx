@@ -1,0 +1,43 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="container flex-c text-center">
+
+    <form class="add" action="{% url 'drugs:add' %}" method="post">
+        {% csrf_token %}
+        <h1>Add Drug</h1>
+        <div class="form-holder grid-2 django-form">
+
+            {% for field in form %}
+            <div class="{{field.field.widget.attrs.class}}">
+                <label for="{{field.auto_id}}"> {{field.label}} </label>
+                {{field}}
+
+            </div>
+            {% endfor %}
+
+            <!-- <div class="choice tab hidden">
+                <label for="id_cd_tab">Cd tab:</label>
+                <input type="text" name="cd_tab" id="id_cd_tab">
+            </div>
+
+            <div class="choice tab hidden">
+                <label for="">No Packs:</label>
+                <input type="text" name="no_packs" id="">
+            </div> -->
+
+        </div>
+
+        <button class="round pointer" type="submit">Add</button>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'main/scripts/forms.js' %}"></script>
+{% endblock %}

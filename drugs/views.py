@@ -16,7 +16,7 @@ def view_drugs(request):
 
 def view_drug(request, pk):
 
-    drug = Drug.objects.filter(pk=pk)[0]
+    drug = Drug.objects.filter(pk=pk).values()[0] # A dict
 
     return render(request, "drugs/view-drug.html", {"drug": drug})
 

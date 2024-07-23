@@ -198,9 +198,9 @@ class Drug(models.Model):
 
         return self.injectible_set.all()[0]
     
-    def __str__(self) -> str:
-        return f" {self.name} Tablet: A drug for {self.purpose} located at {self.location}.\
-                Expires: {self.exp_date} "
+    # def __str__(self) -> str:
+    #     return f" {self.name} Tablet: A drug for {self.purpose} located at {self.location}.\
+    #             Expires: {self.exp_date} "
 
 
 class Tablet(models.Model):

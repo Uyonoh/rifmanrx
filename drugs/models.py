@@ -124,7 +124,25 @@ class Drug(models.Model):
             return "card(s)"
         else:
             return "bottle(s)"
-        
+
+    def get_item_set(self) -> models.QuerySet:
+        """ Return the item set of a tablet, suspension, or injectible """
+
+        try:
+            return self.Tablet
+        except AttributeError:
+            pass
+
+        try:
+            return self.Suspension
+        except AttributeError:
+            pass
+
+        try:
+            return self.Injectible
+        except AttributeError:
+            raise RuntimeError("An error seems to occured with this drug!")
+
     def itemize(self) -> list:
 
         return list(zip(self.table_head(), self.tabulate()))

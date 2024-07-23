@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Drug, Tablet
-from .forms import DrugForm
+from .forms import DrugForm,SaleForm
 
 # Create your views here.
 
@@ -78,7 +78,22 @@ def restock(request, pk):
     return render(request, "drugs/add-drug.html", {"form": form})
 
 def sell(request, pk):
-    return render(request, "drugs/sell.html", {"form": "form"})
+
+    if request.method == "POST":
+        form = SaleForm(request)
+
+        state_dict[state](request, form)
+
+        return HttpResponseRedirect(reverse("drugs:view"))
+    
+    form = SaleForm()
+    drug = Drug.objects.filter(pk=pk)[0]
+    form["drug"].initial = drug
+    form["price"].initial = drug.price
+    form["amount"].initial = 1
+    form.set_classes(drug)
+
+    return render(request, "drugs/sell.html", {"form": form})
 
 def edit(request, pk):
     return render(request, "drugs/add.html", {"form": "form"})

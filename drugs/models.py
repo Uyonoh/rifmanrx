@@ -358,3 +358,10 @@ class Suspension(models.Model):
 
 class Injectible(models.Model):
     pass
+
+
+class Sale(models.Model):
+    drug = models.ForeignKey(Drug, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    price = models.FloatField()
+    time = models.DateTimeField(default=tz.now())

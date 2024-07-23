@@ -30,3 +30,7 @@ stateHandle.addEventListener("change", (e) => {
 });
 
 document.onload = updateForm();
+
+
+// SALE
+

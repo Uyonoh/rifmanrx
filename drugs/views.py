@@ -80,9 +80,11 @@ def restock(request, pk):
 def sell(request, pk):
 
     if request.method == "POST":
-        form = SaleForm(request)
+        form = SaleForm(request.POST)
 
-        state_dict[state](request, form)
+        if form.is_valid():
+            form.save()
+        # state_dict[state](request, form)
 
         return HttpResponseRedirect(reverse("drugs:view"))
     

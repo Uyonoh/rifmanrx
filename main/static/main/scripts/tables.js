@@ -45,7 +45,7 @@ function setView() {
     viewHandlers.forEach((element) => {
         element.addEventListener("click", function clicked (e) {
             const id = element.getAttribute("id");
-            window.open("/drugs/view/" + id, target="");
+            window.open("/drugs/view/" + id, target="_self");
         });
     });
 }

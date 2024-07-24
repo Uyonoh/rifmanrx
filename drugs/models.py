@@ -29,7 +29,6 @@ class Drug(models.Model):
     purpose = models.CharField(max_length=30)
     location = models.CharField(max_length=30)
     day_added = models.DateField(null=False, default=str(tz.now().date()))
-    oos = models.BooleanField(default=False) # Out of stock
     
 
     def check_exp(self) -> int:
@@ -38,11 +37,6 @@ class Drug(models.Model):
         diff = self.exp_date - tz.now().date()
         days = diff.days
         return days
-    
-    def check_oos(self) -> bool:
-        """ Check if a drug is out of stock """
-
-        return self.stock_amount <= 0
     
     def clean_stock(self) -> int | str:
         """ Cleans stock for tablets
@@ -194,7 +188,13 @@ class Drug(models.Model):
 
         if self.stock_amount < 0:
             raise ValueError(f"amount {amount} greater than stock amount")
-    
+        
+    @property
+    def oos(self) -> bool:
+        """ Return bool indicating if a drug is out of stock """
+
+        return self.stock_amount <= 0
+
     @property
     def Tablet(self) -> models.Model:
         """ Gets the tablet assossiated with the drug 

@@ -89,7 +89,12 @@ def sell(request, pk):
         form = SaleForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            try:
+                form.save()
+            except ValueError as e:
+                form.add_error("amount", e)
+                return render(request, "drugs/sell.html", {"form": form})
+
         # state_dict[state](request, form)
 
         return HttpResponseRedirect(reverse("drugs:view"))

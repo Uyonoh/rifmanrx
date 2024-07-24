@@ -11,8 +11,20 @@
     <form class="add" action="{% url 'drugs:add' %}" method="post">
         {% csrf_token %}
         <h1>Add Drug</h1>
-        <div class="form-holder grid-2 django-form">
+        {% if form.errors %}
+            <div class="error">
+                <ul class="errs no-style">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <li class="err"> {{ error }} </li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
+        <div class="form-holder grid-2 django-form">
+            
             {% for field in form %}
             <div class="{{field.field.widget.attrs.class}}">
                 <label for="{{field.auto_id}}"> {{field.label}} </label>

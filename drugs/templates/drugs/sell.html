@@ -8,9 +8,20 @@
 {% block content %}
 <section class="container flex-c text-center">
 
-    <form class="add" ction="{% url 'drugs:add' %}" method="post">
+    <form class="add" action="/drugs/sell/9" method="post">
         {% csrf_token %}
         <h1>Sell Drug</h1>
+
+        <div class="form-holder grid-2 django-form">
+
+            {% for field in form %}
+            <div class="{{field.field.widget.attrs.class}}">
+                <label for="{{field.auto_id}}">{{field.label}}:</label>
+                {{field}}
+            </div>
+            {% endfor %}
+
+        </div>
         
 
         <button class="round pointer" type="submit">Sell</button>
@@ -20,4 +31,26 @@
 
 {% block scripts %}
 <script src="{% static 'main/scripts/forms.js' %}"></script>
+<script>
+    const drugHandle = document.querySelector("#id_drug");
+    const priceHandle = document.querySelector("#id_price");
+    const amountHandle = document.querySelector("#id_amount");
+    const basePrice = priceHandle.value;
+
+    function updateSale() {
+        pk = drugHandle.selectedOptions[0].value;
+        url = "/drugs/sell/" + pk;
+        window.location = url;
+    }
+
+    function updatePrice() {
+        const amount = amountHandle.value;
+
+        price = basePrice * amount;
+        priceHandle.value = price;
+    }
+
+    drugHandle.addEventListener("change", updateSale);
+    amountHandle.addEventListener("change", updatePrice);
+</script>
 {% endblock %}

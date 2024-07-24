@@ -3,7 +3,7 @@ from django import forms
 from django.core.files.base import File
 from django.db.models.base import Model
 from django.forms.utils import ErrorList
-from .models import Drug, Tablet
+from .models import models, Drug, Tablet, Sale
 
 class DrugForm(forms.ModelForm):
     """ Drug input form """
@@ -18,6 +18,13 @@ class DrugForm(forms.ModelForm):
         self.fields["no_packs"].widget.attrs["class"] += " tab"
         self.fields["no_bottles"].widget.attrs["class"] += " sus"
         self.fields["no_viles"].widget.attrs["class"] += " inj"
+
+    def populate(self, drug_set: models.QuerySet) -> forms.ModelForm:
+        drug_dict = drug_set.values()[0]
+
+        for field, value in drug_dict.items():
+            if not field in self.Meta.exclude and field != "exp_date":
+                self.fields[field].initial = value
         
 
     # stock_amount = forms.CharField(max_length=30, required=False)
@@ -31,3 +38,21 @@ class DrugForm(forms.ModelForm):
         model = Drug
         # fields = []
         exclude = ["id", "stock_amount", "price", "day_added", "oos"]
+
+
+class SaleForm(forms.ModelForm):
+    """ Sale form """
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+    def set_classes(self, drug):
+        """ Set form classes """
+
+        self.fields["drug"].widget.attrs["pk"] = f"{drug.pk}"
+
+    
+
+    class Meta:
+        model = Sale
+        exclude = ["time"]

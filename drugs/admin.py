@@ -4,3 +4,4 @@ from .models import *
 # Register your models here.
 admin.site.register(Drug)
 admin.site.register(Tablet)
+admin.site.register(Sale)

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Drug, Tablet
-from .forms import DrugForm
+from .forms import DrugForm,SaleForm
 
 # Create your views here.
 
@@ -16,7 +16,7 @@ def view_drugs(request):
 
 def view_drug(request, pk):
 
-    drug = Drug.objects.filter(pk=pk)[0]
+    drug = Drug.objects.filter(pk=pk).values()[0] # A dict
 
     return render(request, "drugs/view-drug.html", {"drug": drug})
 
@@ -40,7 +40,7 @@ def add_tab(request, form: DrugForm, update: bool=False) -> None:
         update_fields = ["purchase_amount", "cost_price"]
         tab.save(
             # drug_update_fields=update_fields,
-            price=int(request.POST.get("cost_price")),
+            price=float(request.POST.get("cost_price")),
             amount=int(request.POST.get("purchase_amount")),
             units=request.POST.get("purchase_units"),
             first_stock=False
@@ -61,6 +61,7 @@ def add_drug(request):
         form = DrugForm(request.POST)
 
         if form.is_valid():
+            print("valid")
             state = form.instance.state
             if not form.instance.exists():
                 
@@ -68,17 +69,39 @@ def add_drug(request):
             else:
                 state_dict[state](request, form, update=True)
             return HttpResponseRedirect(reverse("drugs:view"))
+        print(form.errors)
 
     else:
         form = DrugForm()
     return render(request, "drugs/add-drug.html", {"form": form})
 
 def restock(request, pk):
+
+    queryset = Drug.objects.filter(pk=pk)
     form = DrugForm()
+    form.populate(queryset)
+
     return render(request, "drugs/add-drug.html", {"form": form})
 
 def sell(request, pk):
-    return render(request, "drugs/sell.html", {"form": "form"})
+
+    if request.method == "POST":
+        form = SaleForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+        # state_dict[state](request, form)
+
+        return HttpResponseRedirect(reverse("drugs:view"))
+    
+    form = SaleForm()
+    drug = Drug.objects.filter(pk=pk)[0]
+    form["drug"].initial = drug
+    form["price"].initial = drug.price
+    form["amount"].initial = 1
+    form.set_classes(drug)
+
+    return render(request, "drugs/sell.html", {"form": form})
 
 def edit(request, pk):
     return render(request, "drugs/add.html", {"form": "form"})

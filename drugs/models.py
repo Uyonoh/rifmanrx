@@ -28,7 +28,7 @@ class Drug(models.Model):
     category = models.CharField(max_length=30)
     purpose = models.CharField(max_length=30)
     location = models.CharField(max_length=30)
-    day_added = models.DateField(null=False, default=str(tz.now().date))
+    day_added = models.DateField(null=False, default=str(tz.now().date()))
     oos = models.BooleanField(default=False) # Out of stock
     
 

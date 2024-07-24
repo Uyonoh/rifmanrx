@@ -20,3 +20,4 @@ function toEdit() {
 }
 
 sellButton.addEventListener("click", toSale);
+restockButton.addEventListener("click", toRestock);

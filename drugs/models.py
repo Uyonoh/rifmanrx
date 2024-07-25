@@ -176,12 +176,20 @@ class Drug(models.Model):
         return ("name", "brand name", "state", "mass", "manufacturer", "Expirery date", "stock", "price",
                 "category", "Out of stock", "expired")
 
-    def tabulate(self) -> tuple:
-        """ Returns a tuple of some drug attributes to be used a table """
 
-        return (self.name, self.brand_name, self.state, self.mass,
-			    self.manufacturer, self.exp_date, self.clean_stock(), self.price, self.category,
-			    self.oos, self.expired)
+    def tabulate(self) -> list[tuple]:
+        """ Returns a list of some drug attribute headings and values to be used a table """
+
+        table = zip(
+            self.table_head(),
+            (
+                self.name, self.brand_name, self.state, self.mass, self.manufacturer, self.exp_date,
+                self.clean_stock(), self.price, self.category, self.oos, self.expired
+            )
+        )
+        print(table)
+
+        return table
     
     def validate_stock_amount(self, amount: int=0) -> None:
         """ Ensure stock amount is not less than zero """

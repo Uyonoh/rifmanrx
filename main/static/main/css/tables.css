@@ -22,23 +22,39 @@ tr.expired {
 	color: white;
 } */
 
-tr.exp-far td {
-	border: 1px solid #4a7420;
-	/* color: #4a7420; */
+tr.exp-far {
+	td {
+		border: 1px solid #4a7420;
+		/* color: #4a7420; */
+	}
+
+	#Expirery\ date {
+		color: #4a7420 !important;
+	}
 	
 }
 
-tr.exp-soon td {
-	border: 1px solid rgb(255, 136, 0);
-	/* color: rgb(255, 136, 0); */
+tr.exp-soon {
+	td {
+		border: 1px solid rgb(255, 136, 0);
+		/* color: rgb(255, 136, 0); */
+	}
 	
+	#Expirery\ date {
+		color: rgb(255, 136, 0) !important;
+	}
 
 }
 
-tr.expired td {
-	border: 1px solid red;
-	/* color: red; */
-	
+tr.expired{
+	td {
+		border: 1px solid red;
+		color: inherit;
+	}
+
+	#Expirery\ date {
+		color: red !important;
+	}
 }
 
 th {

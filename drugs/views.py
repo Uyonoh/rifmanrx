@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Drug, Tablet, Suspension, Injectible
-from .forms import DrugForm,SaleForm
+from .forms import DrugForm
+from books.forms import SaleForm
 
 # Create your views here.
 

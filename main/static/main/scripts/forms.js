@@ -15,21 +15,25 @@ function updateForm() {
     stateFormsList.forEach((forms) => {
         forms.forEach((form) => {
             form.classList.add("hidden");
+            const formInput = form.getElementsByTagName("input")[0];
+            formInput.removeAttribute("required");
+            
         });
     });
 
     stateForms[state].forEach((form) => {
         form.classList.remove("hidden");
         const formInput = form.getElementsByTagName("input")[0];
-        formInput.setAttribute("required", true);
+        formInput.toggleAttribute("required");
     });
+    console.log(state);
 }
 
 stateHandle.addEventListener("change", (e) => {
     updateForm();
 });
 
-document.onload = updateForm();
+window.onload = updateForm();
 
 
 // SALE

@@ -44,6 +44,9 @@ class Migration(migrations.Migration):
             name='Suspension',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('no_bottles', models.IntegerField()),
+                ('no_packs', models.IntegerField(default=1, null=True)),
+                ('drug', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='drugs.drug')),
             ],
         ),
         migrations.CreateModel(

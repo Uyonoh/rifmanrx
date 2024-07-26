@@ -331,7 +331,7 @@ class Tablet(models.Model):
         pass
 
     def __str__(self) -> str:
-        return f" {self.drug.name} Tablet: A drug for {self.drug.purpose} located at {self.drug.location}.\
+        return f" {self.drug.name} Suspension: A drug for {self.drug.purpose} located at {self.drug.location}.\
                 Expires: {self.drug.exp_date} "
     
     @property
@@ -381,10 +381,173 @@ class Tablet(models.Model):
         return self.drug.stock_amount / self.ntabs
 
 class Suspension(models.Model):
-    pass
+    drug = models.ForeignKey(Drug, on_delete=models.CASCADE)
+    no_bottles = models.IntegerField()
+    no_packs = models.IntegerField(default=10, null=True)
+
+    def set_amount(self, units: str=None, amount: int=None) -> int:
+        """ Recalculate purchase amount based on purchase units """
+
+        if amount:
+            self.drug.purchase_amount = amount
+
+        if units:
+            self.drug.purchase_units = units
+
+        amount = self.drug.purchase_amount # Units=unit
+
+        if self.drug.purchase_units == "Packets":
+            amount *= self.no_bottles
+
+        if self.drug.purchase_units == "Cartons":
+            amount = amount * self.no_packs * self.no_bottles
+
+        return amount
+
+    # TODO: Enable on-the -fly edits of prices
+    def set_price(self, price: int=None) -> int:
+        """ Set the price of drug based on purchase units and return price """
+
+        # If price is not supplied, set to cost price
+        if not price:
+            price = self.drug.cost_price
+        # Price per purchase unit
+        price = price / self.drug.purchase_amount
+
+        # If purchase unit is packet, div by no of cards in pack.
+        # Further div by no of packs in carton if unit is carton
+        if self.drug.purchase_units == "Packets":
+            price = price / self.no_bottles
+        elif self.drug.purchase_units == "Cartons":
+            price = price / self.no_bottles
+            price = price / self.no_packs
+
+        # Set cost price to cost price per unit
+        self.drug.cost_price = price
+        # Set sale price to cost price per unit
+        self.drug.price = price
+
+        return price
+    
+    def sell(self, amount: int, units: str="units", is_tab: bool=False) -> None:
+        """ Sell tablet """
+
+        if units == "Packets":
+            amount *= self.no_bottles
+        elif units == "Cartons":
+            amount *= self.no_bottles
+            amount *= self.no_packs
+    
+        self.drug.stock_amount -= amount
+        self.drug.validate_stock_amount(amount)
+        self.drug.save()
+
+    def save(self, price: int=None, units: str=None, amount: int=None, first_stock: bool=True, update: bool=False, sale: bool=False, drug_update_fields: list=None, **kwargs):
+        
+        # If not selling, then it must be addition of stock
+        # If price is passed, then it must be an update
+        if price:
+            update = True
+        # Set/update price
+        
+        stock = self.set_amount(units, amount)
+
+        if update:
+            stock += self.drug.stock_amount
+
+        self.drug.stock_amount = stock
+
+        if not sale:
+            self.set_price(price)
+        self.drug.save(update_fields=drug_update_fields)
+
+        if not update:
+            return super(Suspension, self).save(**kwargs)
 
 class Injectible(models.Model):
-    pass
+
+    drug = models.ForeignKey(Drug, on_delete=models.CASCADE)
+    no_viles = models.IntegerField()
+    no_packs = models.IntegerField(default=10, null=True)
+
+    def set_amount(self, units: str=None, amount: int=None) -> int:
+        """ Recalculate purchase amount based on purchase units """
+
+        if amount:
+            self.drug.purchase_amount = amount
+
+        if units:
+            self.drug.purchase_units = units
+
+        amount = self.drug.purchase_amount # Units=unit
+
+        if self.drug.purchase_units == "Packets":
+            amount *= self.no_viles
+
+        if self.drug.purchase_units == "Cartons":
+            amount = amount * self.no_packs * self.no_viles
+
+        return amount
+
+    # TODO: Enable on-the -fly edits of prices
+    def set_price(self, price: int=None) -> int:
+        """ Set the price of drug based on purchase units and return price """
+
+        # If price is not supplied, set to cost price
+        if not price:
+            price = self.drug.cost_price
+        # Price per purchase unit
+        price = price / self.drug.purchase_amount
+
+        # If purchase unit is packet, div by no of cards in pack.
+        # Further div by no of packs in carton if unit is carton
+        if self.drug.purchase_units == "Packets":
+            price = price / self.no_viles
+        elif self.drug.purchase_units == "Cartons":
+            price = price / self.no_viles
+            price = price / self.no_packs
+
+        # Set cost price to cost price per unit
+        self.drug.cost_price = price
+        # Set sale price to cost price per unit
+        self.drug.price = price
+
+        return price
+    
+    def sell(self, amount: int, units: str="units", is_tab: bool=False) -> None:
+        """ Sell tablet """
+
+        if units == "Packets":
+            amount *= self.no_viles
+        elif units == "Cartons":
+            amount *= self.no_viles
+            amount *= self.no_packs
+    
+        self.drug.stock_amount -= amount
+        self.drug.validate_stock_amount(amount)
+        self.drug.save()
+    
+    def save(self, price: int=None, units: str=None, amount: int=None, first_stock: bool=True, update: bool=False, sale: bool=False, drug_update_fields: list=None, **kwargs):
+        
+        # If not selling, then it must be addition of stock
+        # If price is passed, then it must be an update
+        if price:
+            update = True
+        # Set/update price
+        
+        stock = self.set_amount(units, amount)
+
+        if update:
+            stock += self.drug.stock_amount
+
+        self.drug.stock_amount = stock
+
+        if not sale:
+            self.set_price(price)
+        self.drug.save(update_fields=drug_update_fields)
+
+        if not update:
+            return super(Injectible, self).save(**kwargs)
 
 
 class Sale(models.Model):

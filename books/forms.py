@@ -13,7 +13,7 @@ class SaleForm(forms.ModelForm):
 
         self.fields["drug"].widget.attrs["pk"] = f"{drug.pk}"
 
-    
+
 
     class Meta:
         model = Sale
@@ -31,7 +31,7 @@ class PurchaseForm(forms.ModelForm):
 
         self.fields["drug"].widget.attrs["pk"] = f"{drug.pk}"
 
-    
+
 
     class Meta:
         model = Purchase

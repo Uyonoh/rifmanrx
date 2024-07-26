@@ -43,6 +43,7 @@ class Sale(models.Model):
 
 class Purchase(models.MOdel):
     drug = models.ForeignKey(Drug, on_delete=models.CASCADE)
+    amount = models.IntegerField()
     price = models.FloatField()
     date = models.DateField(default=tz.now().date)
 

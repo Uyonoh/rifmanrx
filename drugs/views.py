@@ -121,6 +121,7 @@ def add_drug(request):
     return render(request, "drugs/add-drug.html", {"form": form})
 
 def restock(request, pk):
+    # TODO: Ensure drug attrs cannot be changed in form
 
     queryset = Drug.objects.filter(pk=pk)
     form = DrugForm()

@@ -11,6 +11,17 @@
     <form class="add" action="/drugs/sell/9" method="post">
         {% csrf_token %}
         <h1>Sell Drug</h1>
+        {% if form.errors %}
+            <div class="error">
+                <ul class="errs no-style">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <li class="err"> {{ error }} </li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
         <div class="form-holder grid-2 django-form">
 

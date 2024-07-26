@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Drug, Tablet
+from .models import Drug, Tablet, Suspension, Injectible
 from .forms import DrugForm,SaleForm
 
 # Create your views here.
@@ -27,14 +27,14 @@ def add_tab(request, form: DrugForm, update: bool=False) -> None:
         tab = Tablet(
             drug=form.instance,
             cd_tab=request.POST.get("cd_tab"),
-            no_packs=request.POST.get("no_packs")
+            no_packs=int(request.POST.get("no_packs"))
         )
         tab.save()
     else:
         tab = Tablet(
             drug=form.instance.export(),
             cd_tab=request.POST.get("cd_tab"),
-            no_packs=request.POST.get("no_packs")
+            no_packs=int(request.POST.get("no_packs"))
         )
         
         update_fields = ["purchase_amount", "cost_price"]
@@ -47,16 +47,61 @@ def add_tab(request, form: DrugForm, update: bool=False) -> None:
             )
         
 def add_sus(request, form: DrugForm, update: bool=False) -> None:
-    pass
+
+    if not update:
+        sus = Suspension(
+            drug=form.instance,
+            no_bottles=int(request.POST.get("no_bottles")),
+            # no_packs=request.POST.get("no_packs")
+        )
+        sus.save()
+    else:
+        sus = Suspension(
+            drug=form.instance.export(),
+            no_bottles=int(request.POST.get("no_bottles")),
+            # no_packs=request.POST.get("no_packs")
+        )
+        
+        update_fields = ["purchase_amount", "cost_price"]
+        sus.save(
+            # drug_update_fields=update_fields,
+            price=float(request.POST.get("cost_price")),
+            amount=int(request.POST.get("purchase_amount")),
+            units=request.POST.get("purchase_units"),
+            first_stock=False
+            )
 
 def add_inj(request, form: DrugForm, update: bool=False) -> None:
-    pass
+
+    if not update:
+        inj = Injectible(
+            drug=form.instance,
+            no_viles=int(request.POST.get("no_bottles")),
+            # no_packs=request.POST.get("no_packs")
+        )
+        inj.save()
+    else:
+        inj = Injectible(
+            drug=form.instance.export(),
+            no_viles=int(request.POST.get("no_bottles")),
+            # no_packs=request.POST.get("no_packs")
+        )
+        
+        update_fields = ["purchase_amount", "cost_price"]
+        inj.save(
+            # drug_update_fields=update_fields,
+            price=float(request.POST.get("cost_price")),
+            amount=int(request.POST.get("purchase_amount")),
+            units=request.POST.get("purchase_units"),
+            first_stock=False
+            )
 
 
 def add_drug(request):
     """ Add a drug to the database """
 
-    state_dict = {"Tab": add_tab, "Suspension": add_sus, "Injectible": add_inj}
+    state_dict = {"Tab": add_tab, "Suspension": add_sus, "Injectable": add_inj}
+    print(request)
     if request.method == "POST":
         form = DrugForm(request.POST)
 
@@ -89,7 +134,12 @@ def sell(request, pk):
         form = SaleForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            try:
+                form.save()
+            except ValueError as e:
+                form.add_error("amount", e)
+                return render(request, "drugs/sell.html", {"form": form})
+
         # state_dict[state](request, form)
 
         return HttpResponseRedirect(reverse("drugs:view"))

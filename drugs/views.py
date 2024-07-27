@@ -82,14 +82,14 @@ def add_inj(request, form: DrugForm, update: bool=False) -> None:
     if not update:
         inj = Injectable(
             drug=form.instance,
-            no_viles=int(request.POST.get("no_bottles")),
+            no_viles=int(request.POST.get("no_viles")),
             # no_packs=request.POST.get("no_packs")
         )
         inj.save()
     else:
         inj = Injectable(
             drug=form.instance.export(),
-            no_viles=int(request.POST.get("no_bottles")),
+            no_viles=int(request.POST.get("no_viles")),
             # no_packs=request.POST.get("no_packs")
         )
         

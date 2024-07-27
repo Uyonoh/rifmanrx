@@ -73,7 +73,7 @@ class BusinessMonth(models.Model):
             return True
         return False
 
-    def get_credits(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
+    def get_credits_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of credits within a timeframe """
 
         credit = 0
@@ -91,7 +91,7 @@ class BusinessMonth(models.Model):
         
         return float(credit)
 
-    def get_debits(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
+    def get_debits_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of debits within a timeframe """
 
         debit = 0
@@ -100,24 +100,24 @@ class BusinessMonth(models.Model):
             opening = self.opening_date
         if not closing:
             closing = self.closing_date
-        
+
         debits = Debit.objects.filter(date__gte=opening)
         debits = debits.filter(date__lte=closing)
 
         for item in debits:
             debit += item.price
-        
+
         return float(debit)
 
-    def get_sales(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
+    def get_sales_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of sales within a timeframe """
 
         sale = 0
 
         if not opening:
             opening = self.opening_date
-        if not closing:
-            closing = self.closing_date
+        if not self.closing_date:
+            closing = closing
 
         sales = Sale.objects.filter(time__gte=opening)
         sales = sales.filter(time__lte=closing)
@@ -127,15 +127,15 @@ class BusinessMonth(models.Model):
 
         return float(sale)
 
-    def get_purchases(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
+    def get_purchases_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of purchases within a timeframe """
 
         purchase = 0
 
         if not opening:
             opening = self.opening_date
-        if not closing:
-            closing = self.closing_date
+        if not self.closing_date:
+            closing = closing
         
         purchases = Purchase.objects.filter(date__gte=opening)
         purchases = purchases.filter(date__lte=closing)
@@ -145,15 +145,15 @@ class BusinessMonth(models.Model):
         
         return float(purchase)
 
-    def get_costs(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
+    def get_costs_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total cost price of drugs sold within a timeframe """
 
         cost = 0
 
         if not opening:
             opening = self.opening_date
-        if not closing:
-            closing = self.closing_date
+        if not self.closing_date:
+            closing = closing
 
         sales = Sale.objects.filter(time__gte=opening)
         sales = sales.filter(time__lte=closing)
@@ -163,26 +163,26 @@ class BusinessMonth(models.Model):
         
         return float(cost)
 
-    def balance_cash(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
+    def balance_cash(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Compute balance on cash """
 
-        credits = self.get_credits(opening=opening, closing=closing)
-        debits = self.get_debits(opening=opening, closing=closing)
+        credits = self.get_credits_price(opening=opening, closing=closing)
+        debits = self.get_debits_price(opening=opening, closing=closing)
 
         balance = self.opening_cash + credits - debits
         return balance
 
-    def balance_stock(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
+    def balance_stock(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Compute balance on stock """
 
-        bought = self.get_purchases(opening=opening, closing=closing)
-        sold = self.get_sales(opening=opening, closing=closing)
+        bought = self.get_purchases_price(opening=opening, closing=closing)
+        sold = self.get_sales_price(opening=opening, closing=closing)
 
         balance = self.opening_stock + bought - sold
         return balance
 
-    def calculate_margin(self,opening: tz.datetime=None, closing: tz.datetime=None, commit: bool=True) -> float:
-        margin = self.get_sales(opening=opening, closing=closing) - self.get_costs(opening=opening, closing=closing)
+    def calculate_margin(self,opening: tz.datetime=None, closing: tz.datetime=tz.now(), commit: bool=True) -> float:
+        margin = self.get_sales_price(opening=opening, closing=closing) - self.get_costs_price(opening=opening, closing=closing)
         self.margin = margin
 
         return margin

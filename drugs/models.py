@@ -123,20 +123,26 @@ class Drug(models.Model):
     def get_item_set(self) -> models.QuerySet:
         """ Return the item set of a tablet, suspension, or injectable """
 
-        try:
-            return self.Tablet
-        except AttributeError:
-            pass
+        keys = {"Tab": self.Tablet, "Suspension": self.Suspension, "Injectable": self.Injectable}
+        state = self.state
 
-        try:
-            return self.Suspension
-        except AttributeError:
-            pass
+        model = keys[state]
+        return model
 
-        try:
-            return self.Injectable
-        except AttributeError:
-            raise RuntimeError("An error seems to occured with this drug!")
+        # try:
+        #     return self.Tablet
+        # except AttributeError:
+        #     pass
+
+        # try:
+        #     return self.Suspension
+        # except AttributeError:
+        #     pass
+
+        # try:
+        #     return self.Injectable
+        # except AttributeError:
+        #     raise RuntimeError("An error seems to occured with this drug!")
 
     def itemize(self) -> list:
 
@@ -209,20 +215,25 @@ class Drug(models.Model):
         There should only be one"""
 
         # TODO: link all drugs with same name, using differernt tablets
-
-        return self.tablet_set.all()[0]
+        if self.state == "Tab":
+            return self.tablet_set.all()[0]
+        return False
 
     @property
     def Suspension(self) -> models.Model:
         """ Gets the suspension assossiated with the drug """
         
-        return self.suspension_set.all()[0]
+        if self.state == "Suspension":
+            return self.suspension_set.all()[0]
+        return False
 
     @property
     def Injectable(self) -> models.Model:
         """ Gets the suspension assossiated with the drug """
 
-        return self.injectable_set.all()[0]
+        if self.state == "Injectable":
+            return self.injectable_set.all()[0]
+        return False
     
     def __str__(self) -> str:
         return f" {self.name} Tablet: A drug for {self.purpose} located at {self.location}.\

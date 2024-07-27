@@ -4,9 +4,6 @@ from .models import *
 
 # Create your views here.
 
-def view_months(request):
-    return render(request, "books/view.html")
-
 def add_credits(request, form) -> None:
     """ Add records for credits """
 
@@ -28,6 +25,24 @@ def add_debits(request, form) -> None:
         price=float(request.POST.get("cost_price"))
     )
 
-    print(debit)
-    print(debit.price)
     debit.save()
+
+def view_month(request, pk: int=None):
+    """ view the current month's records """
+
+    first = tz.datetime(
+        year=tz.now().date().year,
+        month=tz.now().date().month,
+        day=1
+    )
+
+    first = first.date() # First day of curent month
+
+    month = BusinessMonth.objects.filter(opening_date__gte=first)
+
+    return render(request, "books/view.html", {"month": month})
+
+def view_sales(request, pk: int):
+
+    month = BusinessMonth.objects.filter(pk=pk)
+    sales = BusinessMonth.get_sales_price()

@@ -4,4 +4,4 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 
 def view_months(request):
-    return HttpResponseRedirect("/")
+    return render(request, "books/view.html")

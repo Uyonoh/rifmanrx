@@ -1,21 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Drug, Tablet, Suspension, Injectible
+from .models import Drug, Tablet, Suspension, Injectable
 from .forms import DrugForm
 from books.forms import SaleForm
+from books.views import add_credits, add_debits
 
 # Create your views here.
 
 def view_drugs(request):
+    """ Display all drugs """
+
     drugs = list(Drug.objects.all())
-    print(drugs)
+    
     return render(request, "drugs/view-drugs.html", {"drugs": drugs})
 
 
-# state_dict = {"Tab": "Tablet", "Suspension": "Suspension", "Injectible": "Injectible"}
+# state_dict = {"Tab": "Tablet", "Suspension": "Suspension", "Injectable": "Injectable"}
 
 def view_drug(request, pk):
+    """ Display details of a specific drug """
 
     drug = Drug.objects.filter(pk=pk).values()[0] # A dict
 
@@ -48,6 +52,7 @@ def add_tab(request, form: DrugForm, update: bool=False) -> None:
             )
         
 def add_sus(request, form: DrugForm, update: bool=False) -> None:
+    """ Add a suspension """
 
     if not update:
         sus = Suspension(
@@ -75,14 +80,14 @@ def add_sus(request, form: DrugForm, update: bool=False) -> None:
 def add_inj(request, form: DrugForm, update: bool=False) -> None:
 
     if not update:
-        inj = Injectible(
+        inj = Injectable(
             drug=form.instance,
             no_viles=int(request.POST.get("no_bottles")),
             # no_packs=request.POST.get("no_packs")
         )
         inj.save()
     else:
-        inj = Injectible(
+        inj = Injectable(
             drug=form.instance.export(),
             no_viles=int(request.POST.get("no_bottles")),
             # no_packs=request.POST.get("no_packs")
@@ -112,8 +117,10 @@ def add_drug(request):
             if not form.instance.exists():
                 
                 state_dict[state](request, form)
+                add_debits(request, form)
             else:
                 state_dict[state](request, form, update=True)
+                add_debits(request, form)
             return HttpResponseRedirect(reverse("drugs:view"))
         print(form.errors)
 
@@ -138,6 +145,7 @@ def sell(request, pk):
         if form.is_valid():
             try:
                 form.save()
+                add_credits(request, form)
             except ValueError as e:
                 form.add_error("amount", e)
                 return render(request, "drugs/sell.html", {"form": form})

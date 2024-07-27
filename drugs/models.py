@@ -121,7 +121,7 @@ class Drug(models.Model):
             return "bottle(s)"
 
     def get_item_set(self) -> models.QuerySet:
-        """ Return the item set of a tablet, suspension, or injectible """
+        """ Return the item set of a tablet, suspension, or injectable """
 
         try:
             return self.Tablet
@@ -134,7 +134,7 @@ class Drug(models.Model):
             pass
 
         try:
-            return self.Injectible
+            return self.Injectable
         except AttributeError:
             raise RuntimeError("An error seems to occured with this drug!")
 
@@ -187,7 +187,6 @@ class Drug(models.Model):
                 self.clean_stock(), self.price, self.category, self.oos, self.expired
             )
         )
-        print(table)
 
         return table
     
@@ -220,10 +219,10 @@ class Drug(models.Model):
         return self.suspension_set.all()[0]
 
     @property
-    def Injectible(self) -> models.Model:
+    def Injectable(self) -> models.Model:
         """ Gets the suspension assossiated with the drug """
 
-        return self.injectible_set.all()[0]
+        return self.injectable_set.all()[0]
     
     def __str__(self) -> str:
         return f" {self.name} Tablet: A drug for {self.purpose} located at {self.location}.\
@@ -464,7 +463,7 @@ class Suspension(models.Model):
         if not update:
             return super(Suspension, self).save(**kwargs)
 
-class Injectible(models.Model):
+class Injectable(models.Model):
 
     drug = models.ForeignKey(Drug, on_delete=models.CASCADE)
     no_viles = models.IntegerField()
@@ -547,4 +546,4 @@ class Injectible(models.Model):
         self.drug.save(update_fields=drug_update_fields)
 
         if not update:
-            return super(Injectible, self).save(**kwargs)
+            return super(Injectable, self).save(**kwargs)

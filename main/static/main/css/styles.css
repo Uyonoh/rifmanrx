@@ -175,6 +175,37 @@ hr.divider {
     padding: 2rem 0;
 }
 
+button.round{
+    background-color: #097925;
+    color: #efefef;
+    font-size: 1rem;
+    width: fit-content;
+    border-color: transparent;
+    border-radius: 5px;
+    grid-column: span2;
+    margin-top: 2rem;
+    padding-top: .2rem;
+    padding-bottom: .2rem;
+}
+
+button.round:hover {
+    border: 1px solid #4a7420;
+    color: #4a7420;
+    background-color: #E4E9FD;
+}
+
+button.outline-green {
+    border: 1px solid #4a7420;
+    color: #4a7420;
+    background-color: #E4E9FD;
+}
+
+button.outline-green:hover {
+    background-color: #097925;
+    border-color: transparent;
+    color: #efefef;
+}
+
 
 footer {
     background-color: #2c4910;

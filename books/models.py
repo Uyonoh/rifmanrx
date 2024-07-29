@@ -53,6 +53,7 @@ class Purchase(models.Model):
          return f"Purchase of {self.amount} {self.drug.name}(s) on {self.date}"
 
 
+# TODO: Add cash at hand and stock at hand
 class BusinessMonth(models.Model):
     " A bussiness month recording all transactions, profits or losses within the month """
 

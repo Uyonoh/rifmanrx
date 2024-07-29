@@ -1,5 +1,4 @@
 form {
-    padding: 4rem 0;
     border: 1px solid #097925;
     border-radius: 5px;
     width: fit-content;
@@ -27,21 +26,31 @@ form.login {
     }
 }
 
+.error {
+    color:#b12e24
+}
+
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
 }
 
+input, select {
+    background-color: #efefef;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
 .item {
     /* width: auto; */
     display: inline-flex;
     gap: 1rem;
+}
 
-    input {
-        width: 300px;
-        height: 1.5rem;
-    }
+input, select {
+    width: 300px;
+    height: 1.5rem;
 }
 
 input:focus-visible {
@@ -74,6 +83,22 @@ button.round{
     padding-bottom: 7px;
 }
 
+.django-form div {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+
+    label {
+        display: inline;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    input, select {
+        grid-column-start: 3;
+        grid-column-end: 7;
+    }
+}
+
 @media(max-width: 700px) {
     .grid-2 {
         display: grid;
@@ -81,7 +106,11 @@ button.round{
         gap: 2rem;
     }
 
-    input {
-        width: 80%;
+    form {
+        padding: 1rem ;
+    }
+
+    input, select {
+        width: auto;
     }
 }

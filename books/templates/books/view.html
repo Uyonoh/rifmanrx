@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block styles %}
+<link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
 <link rel="stylesheet" href="{% static 'books/css/styles.css' %}">
 {% endblock %}
 
@@ -16,11 +17,11 @@
                 <h2>{{month}}</h2>
             </div>
             <div class="flex m">
-                <a class="no-deco" href="/books/{{month.pk}}"><button class="round pointer">Overview</button></a>
-                <a class="no-deco" href="/books/{{month.pk}}/sales"><button class="round pointer">Sales</button></a>
-                <a class="no-deco" href="/books/{{month.pk}}/purchases"><button class="round pointer">Purchases</button></a>
-                <a class="no-deco" href="/books/{{month.pk}}/debits"><button class="round pointer">Debits</button></a>
-                <a class="no-deco" href="/books/{{month.pk}}/credits"><button class="round pointer">Credits</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}"><button class="round pointer outline-green">Overview</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/sales"><button class="round pointer outline-green">Sales</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/purchases"><button class="round pointer outline-green">Purchases</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/debits"><button class="round pointer outline-green">Debits</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/credits"><button class="round pointer outline-green">Credits</button></a>
             </div>
         </div>
         {% endfor %}

@@ -64,19 +64,6 @@ input[type="password"] {
     color: #750c04;
 }
 
-button.round{
-    background-color: #097925;
-    color: #efefef;
-    font-size: 1rem;
-    width: fit-content;
-    border-color: transparent;
-    border-radius: 5px;
-    grid-column: span2;
-    margin-top: 2rem;
-    padding-top: .2rem;
-    padding-bottom: .2rem;
-}
-
 .add h1 {
     width: 100%;
     border-bottom: 1px solid #074b18;

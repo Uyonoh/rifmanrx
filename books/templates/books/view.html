@@ -1,24 +1,30 @@
 {% extends "main/base.html" %}
 {% load static %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'books/css/styles.css' %}">
+{% endblock %}
+
 {% block content %}
 <section class="container">
     <h1>Books</h1>
 
-    <div class="flex-col">
-        {% for item, val in month.values.0.items %}
-        <p>
-            <b>{{item}}: </b>
-            {{val}}
-        </p>
+    <div class="flex-col text-center">
+        {% for month in months %}
+        <div class="flex-col month">
+            <div class="head">
+                <h2>{{month}}</h2>
+            </div>
+            <div class="flex m">
+                <a class="no-deco" href="/books/{{month.pk}}"><button class="round pointer">Overview</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/sales"><button class="round pointer">Sales</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/purchases"><button class="round pointer">Purchases</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/debits"><button class="round pointer">Debits</button></a>
+                <a class="no-deco" href="/books/{{month.pk}}/credits"><button class="round pointer">Credits</button></a>
+            </div>
+        </div>
         {% endfor %}
 
-        <div class="flex-c">
-            <a class="no-deco" href="#"><button class="round pointer">Sales</button></a>
-            <a class="no-deco" href="#"><button class="round pointer">Purchases</button></a>
-            <a class="no-deco" href="#"><button class="round pointer">Debits</button></a>
-            <a class="no-deco" href="#"><button class="round pointer">Credits</button></a>
-        </div>
     </div>
 </section>
 {% endblock %}

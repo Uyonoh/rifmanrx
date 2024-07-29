@@ -81,8 +81,8 @@ class BusinessMonth(models.Model):
         if not self.closing_date:
             closing = closing
 
-        credits = Credit.objects.filter(time__gte=opening)
-        credits = credits.filter(time__lte=closing)
+        credits = Credit.objects.filter(date__gte=opening)
+        credits = credits.filter(date__lte=closing)
 
         return credits
 
@@ -104,8 +104,8 @@ class BusinessMonth(models.Model):
         if not self.closing_date:
             closing = closing
 
-        debits = Sale.objects.filter(time__gte=opening)
-        debits = debits.filter(time__lte=closing)
+        debits = Debit.objects.filter(date__gte=opening)
+        debits = debits.filter(date__lte=closing)
 
         return debits
 
@@ -150,8 +150,8 @@ class BusinessMonth(models.Model):
         if not self.closing_date:
             closing = closing
 
-        purchases = Sale.objects.filter(time__gte=opening)
-        purchases = purchases.filter(time__lte=closing)
+        purchases = Purchase.objects.filter(date__gte=opening)
+        purchases = purchases.filter(date__lte=closing)
 
         return purchases
 

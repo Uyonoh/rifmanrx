@@ -27,25 +27,56 @@ def add_debits(request, form) -> None:
 
     debit.save()
 
-def view_month(request, pk: int=None):
-    """ view the current month's records """
-
+def first(year: int=tz.now().date().year, month: int=tz.now().date().month) -> tz.datetime:
+    """ Returns the first day of a month.
+        Defaults to first of current month """
+    
     first = tz.datetime(
-        year=tz.now().date().year,
-        month=tz.now().date().month,
+        year=year,
+        month=month,
         day=1
     )
 
-    first = first.date() # First day of curent month
+    return first.date()
 
-    month = BusinessMonth.objects.filter(opening_date__gte=first)
+def view_months(request, pk: int=None):
+    """ view the current month's records """
 
-    return render(request, "books/view.html", {"month": month})
+    months = BusinessMonth.objects.all()
+
+    return render(request, "books/view.html", {"months": months})
+
+def view_month(request, pk):
+    """ View details for a specific month """
+
+    month = BusinessMonth.objects.filter(pk=pk)
+
+    return render(request, "books/view-month.html", {"month": month})
 
 def view_sales(request, pk: int):
 
     month = BusinessMonth.objects.filter(pk=pk)[0]
     sales = month.get_sales()
-    print(sales)
+
+    return render(request, "books/sales.html", {"sales": sales})
+
+def view_purchases(request, pk: int):
+
+    month = BusinessMonth.objects.filter(pk=pk)[0]
+    sales = month.get_purchases()
+
+    return render(request, "books/sales.html", {"sales": sales})
+
+def view_credits(request, pk: int):
+
+    month = BusinessMonth.objects.filter(pk=pk)[0]
+    sales = month.get_credits()
+
+    return render(request, "books/sales.html", {"sales": sales})
+
+def view_debits(request, pk: int):
+
+    month = BusinessMonth.objects.filter(pk=pk)[0]
+    sales = month.get_debits()
 
     return render(request, "books/sales.html", {"sales": sales})

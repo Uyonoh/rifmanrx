@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'main/css/tables.css' %}">
+<link rel="stylesheet" href="{% static 'books/css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="container flex-col">
+    <h1>{{title}}</h1>
+
+    <div class="flex-col">
+
+
+        <table class="items">
+            <thead>
+                <tr>
+                    {% for head in heads %}
+                    <th>{{head.capitalize}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for val in row %}
+                    <td>{{val}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Total: {{total}}</h3>
+        
+    </div>
+</section>
+{% endblock %}

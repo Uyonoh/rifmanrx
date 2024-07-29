@@ -292,7 +292,7 @@ class Tablet(models.Model):
         # Set cost price to cost price per unit
         self.drug.cost_price = price
         # Set sale price to cost price per unit
-        self.drug.price = price
+        self.drug.price = (price * 130 ) / 100
 
         return price
     
@@ -435,7 +435,7 @@ class Suspension(models.Model):
         # Set cost price to cost price per unit
         self.drug.cost_price = price
         # Set sale price to cost price per unit
-        self.drug.price = price
+        self.drug.price = (price * 130 ) / 100
 
         return price
     
@@ -520,7 +520,7 @@ class Injectable(models.Model):
         # Set cost price to cost price per unit
         self.drug.cost_price = price
         # Set sale price to cost price per unit
-        self.drug.price = price
+        self.drug.price = (price * 130 ) / 100
 
         return price
     

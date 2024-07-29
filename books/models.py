@@ -40,7 +40,7 @@ class Sale(models.Model):
         return super(Sale, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return f"Sale of {self.amount} {self.drug.name}(s) on {self.time.date()} at {self.time.time()}"
+        return f"Sale of {self.amount} {self.drug.name}(s)"
     
 
 class Purchase(models.Model):
@@ -53,6 +53,7 @@ class Purchase(models.Model):
          return f"Purchase of {self.amount} {self.drug.name}(s) on {self.date}"
 
 
+# TODO: Add cash at hand and stock at hand
 class BusinessMonth(models.Model):
     " A bussiness month recording all transactions, profits or losses within the month """
 
@@ -62,7 +63,7 @@ class BusinessMonth(models.Model):
     closing_cash = models.FloatField(null=True)
     closing_stock = models.IntegerField(null=True)
     closing_date = models.DateField(null=True)
-    margin = models.FloatField(default=0)
+    # margin = models.FloatField(default=0)
 
     def any(self) -> bool:
         """ Check if any business month exists """
@@ -80,9 +81,11 @@ class BusinessMonth(models.Model):
             opening = self.opening_date
         if not self.closing_date:
             closing = closing
+        else:
+            closing = self.closing_date
 
-        credits = Credit.objects.filter(time__gte=opening)
-        credits = credits.filter(time__lte=closing)
+        credits = Credit.objects.filter(date__gte=opening)
+        credits = credits.filter(date__lte=closing)
 
         return credits
 
@@ -91,7 +94,7 @@ class BusinessMonth(models.Model):
 
         credit = 0
 
-        for item in self.get_credits():
+        for item in self.get_credits(opening=opening, closing=closing):
             credit += item.price
         
         return float(credit)
@@ -103,9 +106,11 @@ class BusinessMonth(models.Model):
             opening = self.opening_date
         if not self.closing_date:
             closing = closing
+        else:
+            closing = self.closing_date
 
-        debits = Sale.objects.filter(time__gte=opening)
-        debits = debits.filter(time__lte=closing)
+        debits = Debit.objects.filter(date__gte=opening)
+        debits = debits.filter(date__lte=closing)
 
         return debits
 
@@ -114,7 +119,7 @@ class BusinessMonth(models.Model):
 
         debit = 0
 
-        for item in self.get_debits():
+        for item in self.get_debits(opening=opening, closing=closing):
             debit += item.price
 
         return float(debit)
@@ -126,6 +131,8 @@ class BusinessMonth(models.Model):
             opening = self.opening_date
         if not self.closing_date:
             closing = closing
+        else:
+            closing = self.closing_date
 
         sales = Sale.objects.filter(time__gte=opening)
         sales = sales.filter(time__lte=closing)
@@ -137,7 +144,7 @@ class BusinessMonth(models.Model):
 
         sale = 0
 
-        for item in self.get_sales():
+        for item in self.get_sales(opening=opening, closing=closing):
             sale += item.price #com
 
         return float(sale)
@@ -149,9 +156,11 @@ class BusinessMonth(models.Model):
             opening = self.opening_date
         if not self.closing_date:
             closing = closing
+        else:
+            closing = self.closing_date
 
-        purchases = Sale.objects.filter(time__gte=opening)
-        purchases = purchases.filter(time__lte=closing)
+        purchases = Purchase.objects.filter(date__gte=opening)
+        purchases = purchases.filter(date__lte=closing)
 
         return purchases
 
@@ -160,7 +169,7 @@ class BusinessMonth(models.Model):
 
         purchase = 0
 
-        for item in self.get_purchases():
+        for item in self.get_purchases(opening=opening, closing=closing):
             purchase += item.price
         
         return float(purchase)
@@ -173,6 +182,8 @@ class BusinessMonth(models.Model):
             opening = self.opening_date
         if not self.closing_date:
             closing = closing
+        else:
+            closing = self.closing_date
 
         costs = Sale.objects.filter(time__gte=opening)
         costs = costs.filter(time__lte=closing)
@@ -184,7 +195,7 @@ class BusinessMonth(models.Model):
 
         cost = 0
 
-        for item in self.get_costs():
+        for item in self.get_costs(opening=opening, closing=closing):
             cost += (item.drug.cost_price * item.amount)
         
         return float(cost)
@@ -208,8 +219,15 @@ class BusinessMonth(models.Model):
         return balance
 
     def calculate_margin(self,opening: tz.datetime=None, closing: tz.datetime=tz.now(), commit: bool=True) -> float:
+        if not closing:
+            closing = self.closing_date
+        if not closing:
+            closing = tz.now()
+
         margin = self.get_sales_price(opening=opening, closing=closing) - self.get_costs_price(opening=opening, closing=closing)
-        self.margin = margin
+        print(self.get_sales_price(opening=opening, closing=closing))
+        print(self.get_costs_price(opening=opening, closing=closing))
+        # self.margin = margin
 
         return margin
 
@@ -228,6 +246,10 @@ class BusinessMonth(models.Model):
 
             self.calculate_margin()
             self.save()
+    
+    @property
+    def margin(self) -> int:
+        return self.calculate_margin(closing=None)
 
     def __str__(self):
         return f"Bussiness month from {self.opening_date} to {self.closing_date}"

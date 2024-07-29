@@ -40,7 +40,7 @@ class Sale(models.Model):
         return super(Sale, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return f"Sale of {self.amount} {self.drug.name}(s) on {self.time.date()} at {self.time.time()}"
+        return f"Sale of {self.amount} {self.drug.name}(s)"
     
 
 class Purchase(models.Model):

@@ -7,12 +7,12 @@
 {% endblock %}
 
 {% block content %}
-<section class="container">
-    <h1>Books</h1>
+<section class="container flex-col">
+    <h1>Bussiness Months</h1>
 
     <div class="flex-col text-center">
         {% for month in months %}
-        <div class="flex-col month">
+        <div class="flex-col month-card">
             <div class="head">
                 <h2>{{month}}</h2>
             </div>

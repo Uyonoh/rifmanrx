@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block content %}
-<section class="container">
-    <h1>Books</h1>
+<section class="container flex-col pb-3">
+    <h1>Overview: {{month.0}}</h1>
 
     <div class="flex-col">
         {% for item, val in month.values.0.items %}
@@ -12,6 +12,14 @@
             {{val}}
         </p>
         {% endfor %}
+        <p>
+            <b>Credits: </b>
+            {{month.0.get_credits_price}}
+        </p>
+        <p>
+            <b>Debits: </b>
+            {{month.0.get_debits_price}}
+        </p>
         <p>
             <b>Margin: </b>
             {{month.0.margin}}

@@ -39,6 +39,48 @@ def first(year: int=tz.now().date().year, month: int=tz.now().date().month) -> t
 
     return first.date()
 
+def make_heads(queryset: models.QuerySet) -> list:
+    """ Return table headings for a model """
+
+    if queryset.count() < 1:
+        return None
+
+    keys = queryset.values()[0].keys()
+    keys = list(keys)
+    keys.insert(0, "S/N")
+
+    if "drug_id" in keys:
+        idx = keys.index("drug_id")
+        keys[idx] = "drug"
+
+    return keys
+
+def make_rows(queryset: models.QuerySet) -> dict:
+
+    if queryset.count() < 1:
+        return None
+
+    rows = list(queryset.values_list())
+    keys = make_heads(queryset)
+
+    for count in range(len(rows)):
+        row = list(rows[count])
+        row.insert(0, count + 1)
+        rows[count] = row
+
+    if "drug" in keys:
+        idx = keys.index("drug")
+
+        i = 0
+        for count in range(len(rows)):
+            row = list(rows[count])
+            item = queryset[count]
+
+            row[idx] = item.drug.name
+            rows[count] = row
+
+    return rows
+
 def view_months(request, pk: int=None):
     """ view the current month's records """
 
@@ -57,26 +99,70 @@ def view_sales(request, pk: int):
 
     month = BusinessMonth.objects.filter(pk=pk)[0]
     sales = month.get_sales()
+    total = month.get_sales_price()
+    
+    heads = make_heads(sales)
+    rows = make_rows(sales)
 
-    return render(request, "books/sales.html", {"sales": sales})
+    return render(request, "books/items.html",
+                  {"model_query": sales,
+                   "title": "Sales",
+                   "heads": heads,
+                   "rows": rows,
+                   "total": total
+                   }
+                )
 
 def view_purchases(request, pk: int):
 
     month = BusinessMonth.objects.filter(pk=pk)[0]
-    sales = month.get_purchases()
+    purchases = month.get_purchases()
+    total = month.get_purchases_price()
 
-    return render(request, "books/sales.html", {"sales": sales})
+    heads = make_heads(purchases)
+    rows = make_rows(purchases)
+
+    return render(request, "books/items.html",
+                  {"model_query": purchases,
+                   "title": "Purchases",
+                   "heads": heads,
+                   "rows": rows,
+                   "total": total
+                   }
+                )
 
 def view_credits(request, pk: int):
 
     month = BusinessMonth.objects.filter(pk=pk)[0]
-    sales = month.get_credits()
+    credits = month.get_credits()
+    total = month.get_credits_price()
 
-    return render(request, "books/sales.html", {"sales": sales})
+    heads = make_heads(credits)
+    rows = make_rows(credits)
+
+    return render(request, "books/items.html",
+                  {"model_query": credits,
+                   "title": "Credits",
+                   "heads": heads,
+                   "rows": rows,
+                   "total": total
+                   }
+                )
 
 def view_debits(request, pk: int):
 
     month = BusinessMonth.objects.filter(pk=pk)[0]
-    sales = month.get_debits()
+    debits = month.get_debits()
+    total = month.get_debits_price()
 
-    return render(request, "books/sales.html", {"sales": sales})
+    heads = make_heads(debits)
+    rows = make_rows(debits)
+
+    return render(request, "books/items.html",
+                  {"model_query": debits,
+                   "title": "Debits",
+                   "heads": heads,
+                   "rows": rows,
+                   "total": total
+                   }
+                )

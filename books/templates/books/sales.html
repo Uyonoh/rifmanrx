@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="container">
+    <h1>Books</h1>
+
+    <div class="flex-col">
+        {% for sale in sales %}
+        <!-- Tabulate -->
+        <div class="flex">
+            {{sale}}
+            {% for item, val in sale.values.0.items %}
+            <div>
+                
+                <b>{{item}}: </b>
+                {{val}}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

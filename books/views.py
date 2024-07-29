@@ -44,5 +44,8 @@ def view_month(request, pk: int=None):
 
 def view_sales(request, pk: int):
 
-    month = BusinessMonth.objects.filter(pk=pk)
-    sales = BusinessMonth.get_sales_price()
+    month = BusinessMonth.objects.filter(pk=pk)[0]
+    sales = month.get_sales()
+    print(sales)
+
+    return render(request, "books/sales.html", {"sales": sales})

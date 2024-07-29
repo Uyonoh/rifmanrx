@@ -73,92 +73,118 @@ class BusinessMonth(models.Model):
             return True
         return False
 
+    def get_credits(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+        """ Get total credits within a timeframe """
+
+        if not opening:
+            opening = self.opening_date
+        if not self.closing_date:
+            closing = closing
+
+        credits = Credit.objects.filter(time__gte=opening)
+        credits = credits.filter(time__lte=closing)
+
+        return credits
+
     def get_credits_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of credits within a timeframe """
 
         credit = 0
 
-        if not opening:
-            opening = self.opening_date
-        if not closing:
-            closing = self.closing_date
-        
-        credits = Credit.objects.filter(date__gte=opening)
-        credits = credits.filter(date__lte=closing)
-
-        for item in credits:
+        for item in self.get_credits():
             credit += item.price
         
         return float(credit)
+
+    def get_debits(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+        """ Get total debits within a timeframe """
+
+        if not opening:
+            opening = self.opening_date
+        if not self.closing_date:
+            closing = closing
+
+        debits = Sale.objects.filter(time__gte=opening)
+        debits = debits.filter(time__lte=closing)
+
+        return debits
 
     def get_debits_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of debits within a timeframe """
 
         debit = 0
 
-        if not opening:
-            opening = self.opening_date
-        if not closing:
-            closing = self.closing_date
-
-        debits = Debit.objects.filter(date__gte=opening)
-        debits = debits.filter(date__lte=closing)
-
-        for item in debits:
+        for item in self.get_debits():
             debit += item.price
 
         return float(debit)
+
+    def get_sales(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+        """ Get total sales within a timeframe """
+
+        if not opening:
+            opening = self.opening_date
+        if not self.closing_date:
+            closing = closing
+
+        sales = Sale.objects.filter(time__gte=opening)
+        sales = sales.filter(time__lte=closing)
+
+        return sales
 
     def get_sales_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of sales within a timeframe """
 
         sale = 0
 
+        for item in self.get_sales():
+            sale += item.price #com
+
+        return float(sale)
+
+    def get_purchases(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+        """ Get total purchases within a timeframe """
+
         if not opening:
             opening = self.opening_date
         if not self.closing_date:
             closing = closing
 
-        sales = Sale.objects.filter(time__gte=opening)
-        sales = sales.filter(time__lte=closing)
+        purchases = Sale.objects.filter(time__gte=opening)
+        purchases = purchases.filter(time__lte=closing)
 
-        for item in sales:
-            sale += item.price #com
-
-        return float(sale)
+        return purchases
 
     def get_purchases_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total price of purchases within a timeframe """
 
         purchase = 0
 
+        for item in self.get_purchases():
+            purchase += item.price
+        
+        return float(purchase)
+
+    # Same as get sales; useful?
+    def get_costs(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+        """ Get total costs within a timeframe """
+
         if not opening:
             opening = self.opening_date
         if not self.closing_date:
             closing = closing
-        
-        purchases = Purchase.objects.filter(date__gte=opening)
-        purchases = purchases.filter(date__lte=closing)
 
-        for item in purchases:
-            purchase += item.price
-        
-        return float(purchase)
+        costs = Sale.objects.filter(time__gte=opening)
+        costs = costs.filter(time__lte=closing)
+
+        return costs
 
     def get_costs_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
         """ Get total cost price of drugs sold within a timeframe """
 
         cost = 0
 
-        if not opening:
-            opening = self.opening_date
-        if not self.closing_date:
-            closing = closing
-
-        sales = Sale.objects.filter(time__gte=opening)
-        sales = sales.filter(time__lte=closing)
-
-        for item in sales:
+        for item in self.get_costs():
             cost += (item.drug.cost_price * item.amount)
         
         return float(cost)

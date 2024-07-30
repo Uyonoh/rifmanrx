@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import view_drugs, view_drug, add_drug, sell, restock, edit
+from .views import view_drugs, view_drug, add_drug, sell, restock, edit, add_csv
 
 app_name = "drugs"
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path("sell/<int:pk>", sell, name="sell"),
     path("restock/<int:pk>", restock, name="restock"),
     path("edit/<int:pk>", edit, name="edit"),
+    path("add-csv", add_csv, name="add-csv"),
 ]

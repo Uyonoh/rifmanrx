@@ -93,6 +93,5 @@ def drug_from_csv(path: str) -> None:
         form = DrugForm()
         form.instance = drug
         add_purchase(drug, drug.purchase_amount, float(request.POST.get("cost_price")))
-        print(request.POST.get("cost_price"))
         add_debits(request, form)
     print("="*28 + " Finished " + "="*28)

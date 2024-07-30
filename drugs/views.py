@@ -5,6 +5,7 @@ from .models import Drug, Tablet, Suspension, Injectable
 from .forms import DrugForm
 from books.forms import SaleForm
 from books.views import add_credits, add_debits, add_purchase
+from .utils import drug_from_csv
 
 # Create your views here.
 
@@ -173,3 +174,14 @@ def sell(request, pk):
 
 def edit(request, pk):
     return render(request, "drugs/add.html", {"form": "form"})
+
+
+def add_csv(request):
+
+    if request.method == "POST" and request.FILES["csv"]:
+        file = request.FILES["csv"]
+
+        drug_from_csv(file)
+        return HttpResponseRedirect(reverse("drugs:view"))
+
+    return render(request, "drugs/add-csv.html", {"form": "form"})

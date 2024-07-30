@@ -1,0 +1,5 @@
+"name","brand_name","mass","state","manufacturer","exp_date","purchase_amount","purchase_units","cost_price","category","purpose","location","cd_tab","no_packs","no_bottles","no_viles"
+"paracetamol","pcm",500,"tab","emzor",2024-12-20,10,"unit",900,"-","-","-","10/12",0,0,0
+"paracetamol","pcm",200,"suspension","emzor",2024-12-20,10,"unit",1500,"-","-","-","-",0,10,0
+"Pro-cold","-",100,"tab","-",2024-12-20,1,"packets",4000,"-","-","-","50/4",0,0,0
+"gentamycine","gent",50,"injectable","-",2024-12-20,1,"packets",1000,"-","-","-","-",0,0,10

@@ -41,7 +41,7 @@ class Sale(models.Model):
 
     def __str__(self) -> str:
         return f"Sale of {self.amount} {self.drug.name}(s)"
-    
+
 
 class Purchase(models.Model):
     drug = models.ForeignKey(Drug, on_delete=models.SET_NULL, null=True)

@@ -29,7 +29,7 @@ class Debit(models.Model):
 
 
 class Sale(models.Model):
-    drug = models.ForeignKey(Drug, on_delete=models.CASCADE)
+    drug = models.ForeignKey(Drug, on_delete=models.CASCADE, null=True)
     amount = models.IntegerField()
     price = models.FloatField()
     time = models.DateTimeField(default=tz.now)
@@ -41,10 +41,10 @@ class Sale(models.Model):
 
     def __str__(self) -> str:
         return f"Sale of {self.amount} {self.drug.name}(s)"
-    
+
 
 class Purchase(models.Model):
-    drug = models.ForeignKey(Drug, on_delete=models.CASCADE)
+    drug = models.ForeignKey(Drug, on_delete=models.CASCADE, null=True)
     amount = models.IntegerField()
     price = models.FloatField()
     date = models.DateField(default=tz.now)

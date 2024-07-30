@@ -1,0 +1,45 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
+     <style>
+        input {
+            padding: 2px;
+            padding-top: 4px;
+        }
+     </style>
+{% endblock %}
+
+{% block content %}
+<section class="container flex-c text-center">
+
+    <form class="add flex-col" enctype="multipart/form-data" action="{% url 'drugs:add-csv' %}" method="post">
+        {% csrf_token %}
+        <h1>Add Drug</h1>
+        {% if form.errors %}
+            <div class="error">
+                <ul class="errs no-style">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                    <li class="err"> {{ error }} </li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+        <div class="form-holder django-form">
+            
+            <input type="file" name="csv" id="csv">
+
+        </div>
+
+        <button class="round pointer" type="submit" value="upload">Add</button>
+    </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'main/scripts/forms.js' %}" defer></script>
+{% endblock %}

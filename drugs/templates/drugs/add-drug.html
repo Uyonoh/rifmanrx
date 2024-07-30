@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<section class="container flex-c text-center">
+<section class="container flex-col text-center">
 
     <form class="add" action="{% url 'drugs:add' %}" method="post">
         {% csrf_token %}
@@ -47,6 +47,7 @@
 
         <button class="round pointer" type="submit">Add</button>
     </form>
+    <p>Use a <a href="{% url 'drugs:add-csv' %}">CSV file</a> instaed</p>
 </section>
 {% endblock %}
 

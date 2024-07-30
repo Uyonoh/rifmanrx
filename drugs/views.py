@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import Drug, Tablet, Suspension, Injectable
 from .forms import DrugForm
 from books.forms import SaleForm
-from books.views import add_credits, add_debits
+from books.views import add_credits, add_debits, add_purchase
 
 # Create your views here.
 
@@ -25,7 +25,7 @@ def view_drug(request, pk):
 
     return render(request, "drugs/view-drug.html", {"drug": drug})
 
-def add_tab(request, form: DrugForm, update: bool=False) -> None:
+def add_tab(request, form: DrugForm, update: bool=False) -> Drug:
     """ Add a tablet drug """
 
     if not update:
@@ -50,8 +50,10 @@ def add_tab(request, form: DrugForm, update: bool=False) -> None:
             units=request.POST.get("purchase_units"),
             first_stock=False
             )
+    
+    return tab.drug
         
-def add_sus(request, form: DrugForm, update: bool=False) -> None:
+def add_sus(request, form: DrugForm, update: bool=False) -> Drug:
     """ Add a suspension """
 
     if not update:
@@ -76,8 +78,10 @@ def add_sus(request, form: DrugForm, update: bool=False) -> None:
             units=request.POST.get("purchase_units"),
             first_stock=False
             )
+    
+    return sus.drug
 
-def add_inj(request, form: DrugForm, update: bool=False) -> None:
+def add_inj(request, form: DrugForm, update: bool=False) -> Drug:
 
     if not update:
         inj = Injectable(
@@ -101,6 +105,8 @@ def add_inj(request, form: DrugForm, update: bool=False) -> None:
             units=request.POST.get("purchase_units"),
             first_stock=False
             )
+    
+    return inj.drug
 
 
 def add_drug(request):
@@ -116,10 +122,12 @@ def add_drug(request):
             state = form.instance.state
             if not form.instance.exists():
                 
-                state_dict[state](request, form)
+                drug = state_dict[state](request, form)
+                add_purchase(drug, drug.purchase_amount, int(request.POST.get("cost_price")))
                 add_debits(request, form)
             else:
-                state_dict[state](request, form, update=True)
+                drug = state_dict[state](request, form)
+                add_purchase(drug, drug.purchase_amount, int(request.POST.get("cost_price")))
                 add_debits(request, form)
             return HttpResponseRedirect(reverse("drugs:view"))
         print(form.errors)

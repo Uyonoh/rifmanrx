@@ -29,7 +29,7 @@ class Debit(models.Model):
 
 
 class Sale(models.Model):
-    drug = models.ForeignKey(Drug, on_delete=models.DO_NOTHING)
+    drug = models.ForeignKey(Drug, on_delete=models.SET_NULL, null=True)
     amount = models.IntegerField()
     price = models.FloatField()
     time = models.DateTimeField(default=tz.now)
@@ -44,7 +44,7 @@ class Sale(models.Model):
     
 
 class Purchase(models.Model):
-    drug = models.ForeignKey(Drug, on_delete=models.DO_NOTHING)
+    drug = models.ForeignKey(Drug, on_delete=models.SET_NULL, null=True)
     amount = models.IntegerField()
     price = models.FloatField()
     date = models.DateField(default=tz.now)

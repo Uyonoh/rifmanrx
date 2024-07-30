@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import *
+from django.utils import timezone as tz
+from django.db import models
+from .models import BusinessMonth, Credit, Debit, Purchase, Sale
 
 # Create your views here.
 
@@ -26,6 +29,17 @@ def add_debits(request, form) -> None:
     )
 
     debit.save()
+
+def add_purchase(drug, amount: int, price: float) -> None:
+    """ Add purchase record for item """
+
+    purchase = Purchase(
+        drug=drug,
+        amount=amount,
+        price=price
+    )
+
+    purchase.save()
 
 def first(year: int=tz.now().date().year, month: int=tz.now().date().month) -> tz.datetime:
     """ Returns the first day of a month.
@@ -81,10 +95,29 @@ def make_rows(queryset: models.QuerySet) -> dict:
 
     return rows
 
+def make_month(opening_cash: int=0, opening_stock: int=0, closing_cash: int=0, closing_stock: int=0, opening_date: tz.datetime=None) -> None:
+    """ Creste a new bussiness month """
+
+    if not opening_date:
+        opening_date = first()
+    month = BusinessMonth(
+        opening_cash=opening_cash,
+        opening_stock=opening_stock,
+        closing_cash=closing_cash,
+        closing_stock=closing_stock,
+        opening_date=opening_date,
+    )
+
+    month.save()
+
 def view_months(request, pk: int=None):
-    """ view the current month's records """
+    """ view the bussiness months """
 
     months = BusinessMonth.objects.all()
+
+    if months.count() < 1:
+        make_month()
+        return HttpResponseRedirect(reverse("books:view"))
 
     return render(request, "books/view.html", {"months": months})
 

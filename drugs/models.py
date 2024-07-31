@@ -236,7 +236,7 @@ class Drug(models.Model):
         return False
     
     def __str__(self) -> str:
-        return f" {self.name} Tablet: A drug for {self.purpose} located at {self.location}.\
+        return f" {self.name}: A drug for {self.purpose} located at {self.location}.\
                 Expires: {self.exp_date} "
 
 

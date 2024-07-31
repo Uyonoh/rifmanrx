@@ -60,7 +60,7 @@ class Drug(models.Model):
 
         return self.stock_amount
     
-    def exists(self) -> models.Model:
+    def exists(self) -> bool:
         """ Check if drug instance already exists """
 
         drug = Drug.objects.filter(

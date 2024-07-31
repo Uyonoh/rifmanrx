@@ -19,12 +19,21 @@ class DrugForm(forms.ModelForm):
         self.fields["no_bottles"].widget.attrs["class"] += " sus"
         self.fields["no_viles"].widget.attrs["class"] += " inj"
 
-    def populate(self, drug_set: models.QuerySet) -> forms.ModelForm:
+    def populate(self, drug_set: models.QuerySet[Drug]) -> forms.ModelForm:
         drug_dict = drug_set.values()[0]
 
         for field, value in drug_dict.items():
             if not field in self.Meta.exclude and field != "exp_date":
                 self.fields[field].initial = value
+        
+        state = drug_dict["state"]
+        if state == "Tab":
+            self.fields["cd_tab"].initial = drug_set[0].get_item_set().cd_tab
+            self.fields["no_packs"].initial = drug_set[0].get_item_set().no_packs
+        elif state == "Suspension":
+            self.fields["no_bottles"].initial = drug_set[0].get_item_set().no_bottles
+        else:
+            self.fields["no_viles"].initial = drug_set[0].get_item_set().no_viles
         
 
     # stock_amount = forms.CharField(max_length=30, required=False)

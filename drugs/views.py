@@ -26,8 +26,16 @@ def view_drug(request, pk):
 
     return render(request, "drugs/view-drug.html", {"drug": drug})
 
-def add_tab(request, form: DrugForm, update: bool=False) -> Drug:
+def add_tab(request, form: DrugForm) -> Drug:
     """ Add a tablet drug """
+
+    #: bool: true if drug already exists and has same expirery date
+    update = form.instance.exists()
+    if update:
+        #: bool: true if existing drug has same expirery date
+        same_exp = str(form.instance.exp_date) == str(request.POST.get("exp_date"))
+        update = same_exp
+
 
     if not update:
         tab = Tablet(
@@ -54,8 +62,16 @@ def add_tab(request, form: DrugForm, update: bool=False) -> Drug:
     
     return tab.drug
         
-def add_sus(request, form: DrugForm, update: bool=False) -> Drug:
+def add_sus(request, form: DrugForm) -> Drug:
     """ Add a suspension """
+
+    #: bool: true if drug already exists and has same expirery date
+    update = form.instance.exists()
+    if update:
+        #: bool: true if existing drug has same expirery date
+        same_exp = str(form.instance.exp_date) == str(request.POST.get("exp_date"))
+        update = same_exp
+
 
     if not update:
         sus = Suspension(
@@ -82,7 +98,15 @@ def add_sus(request, form: DrugForm, update: bool=False) -> Drug:
     
     return sus.drug
 
-def add_inj(request, form: DrugForm, update: bool=False) -> Drug:
+def add_inj(request, form: DrugForm) -> Drug:
+    """ Add an injectable """
+
+    #: bool: true if drug already exists and has same expirery date
+    update = form.instance.exists()
+    if update:
+        #: bool: true if existing drug has same expirery date
+        same_exp = str(form.instance.exp_date) == str(request.POST.get("exp_date"))
+        update = same_exp
 
     if not update:
         inj = Injectable(
@@ -121,20 +145,15 @@ def add_drug(request):
         if form.is_valid():
             print("valid")
             state = form.instance.state
-            if not form.instance.exists():
-                
-                drug = state_dict[state](request, form)
-                add_purchase(drug, drug.purchase_amount, int(request.POST.get("cost_price")))
-                add_debits(request, form)
-            else:
-                drug = state_dict[state](request, form)
-                add_purchase(drug, drug.purchase_amount, int(request.POST.get("cost_price")))
-                add_debits(request, form)
-            return HttpResponseRedirect(reverse("drugs:view"))
-        print(form.errors)
+            drug = state_dict[state](request, form)
 
+            add_purchase(drug, drug.purchase_amount, float(request.POST.get("cost_price")))
+            add_debits(request, form)
+
+            return HttpResponseRedirect(reverse("drugs:view"))
     else:
         form = DrugForm()
+
     return render(request, "drugs/add-drug.html", {"form": form})
 
 def restock(request, pk):

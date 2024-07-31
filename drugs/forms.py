@@ -8,6 +8,11 @@ from .models import models, Drug, Tablet
 class DrugForm(forms.ModelForm):
     """ Drug input form """
 
+    cd_tab = forms.CharField(max_length=30, required=False)
+    no_packs = forms.IntegerField(required=False)
+    no_bottles = forms.IntegerField(required=False)
+    no_viles = forms.IntegerField(required=False)
+
     def __init__(self,*args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
@@ -34,13 +39,24 @@ class DrugForm(forms.ModelForm):
             self.fields["no_bottles"].initial = drug_set[0].get_item_set().no_bottles
         else:
             self.fields["no_viles"].initial = drug_set[0].get_item_set().no_viles
-        
 
-    # stock_amount = forms.CharField(max_length=30, required=False)
-    cd_tab = forms.CharField(max_length=30, required=False)
-    no_packs = forms.IntegerField(required=False)
-    no_bottles = forms.IntegerField(required=False)
-    no_viles = forms.IntegerField(required=False)
+    def upper(self) -> None:
+        form  = super(DrugForm, self).save(commit=False)
+
+        for field in self.visible_fields():
+            try:
+                val = getattr(form, field.name)
+            except AttributeError:
+                continue
+
+            if isinstance(val, str) and field.name != "state":
+                setattr(form, field.name, val.upper())
+        # form.save()
+
+    # def save(self, commit: bool=False) -> None:
+    def save(self, commit: bool = ...) -> Any:
+        return super().save(commit)
+        
     
 
     class Meta:

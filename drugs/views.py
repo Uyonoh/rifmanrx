@@ -143,7 +143,7 @@ def add_drug(request):
         form = DrugForm(request.POST)
 
         if form.is_valid():
-            print("valid")
+            form.upper()
             state = form.instance.state
             drug = state_dict[state](request, form)
 
@@ -204,3 +204,15 @@ def add_csv(request):
         return HttpResponseRedirect(reverse("drugs:view"))
 
     return render(request, "drugs/add-csv.html", {"form": "form"})
+
+def search_drugs(request):
+    drugs = []
+    print(request.GET)
+    if request.method == "GET":
+        query = request.GET.get("query").upper()
+        drugs = Drug.objects.filter(name__startswith=query)
+
+        if drugs.count() < 1 or request.GET.get("brand"):
+            drugs = Drug.objects.filter(brand_name__startswith=query)
+    
+    return render(request, "drugs/view-drugs.html", {"drugs": drugs})

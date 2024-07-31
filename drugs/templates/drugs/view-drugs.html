@@ -4,15 +4,29 @@
 {% block styles %}
     <link rel="stylesheet" href="{% static 'main/css/forms.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/tables.css' %}">
+
+    <style>
+        .fit {
+            width: fit-content !important;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
 <section class="container flex-col text-center">
 
-    <form class="add" action="{% url 'drugs:add' %}" method="post">
+    <form class="add" action="{% url 'drugs:search' %}" method="get">
         {% csrf_token %}
         <h1>Drugs</h1>
-        <p>Working on this</p>
+        <div class="flex">
+            <input type="search" name="query" id="" placeholder="Search drugs">
+            <div class="flex">
+                <label for="brand">brand name</label>
+                <input class="fit" type="checkbox" name="brand" id="">
+            </div>
+            <button type="submit" class="pointer"><img class="svg search" src="{% static 'main/assets/svg/search.svg' %}" alt=""></button>
+        </div>
+        
     </form>
 </section>
 

@@ -84,7 +84,9 @@ def drug_from_csv(path: str) -> None:
     print("="*28 + " Adding drugs " + "="*28)
     for i in range(data.shape[0]):
         row = data.iloc[i]
-        row.name = row["name"]
+        row.name = row["name"].upper()
+        for field, value in row.items():
+            row[field] = str(value).upper()
 
         print(f"making drug {row.name}...")
         drug = make_drug(row)

@@ -63,6 +63,11 @@ body {
     margin: 0;
 }
 
+.no-border {
+    border: none;
+    background-color: inherit;
+}
+
 header {
     background-color: #4a7420;
     color: #E4E9FD;

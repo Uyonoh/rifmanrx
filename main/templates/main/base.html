@@ -35,10 +35,11 @@
             <p class="flex"><span class="close pointer">
                 <img class="svg close" src="{% static 'main/assets/svg/circle-xmark.svg' %}" alt="">
             </span></p>
-             <div class="search flex">
-                 <input type="search" name="search" placeholder="Search Drugs">
-                 <img class="svg search pointer" src="{% static 'main/assets/svg/search.svg' %}" alt="">
-             </div>
+            <form class="search flex no-border" action="{% url 'drugs:search' %}" method="get">
+                {% csrf_token %}
+                 <input type="search" name="query" placeholder="Search Drugs">
+                 <button class="no-border" type="submit"><img class="svg search pointer" src="{% static 'main/assets/svg/search.svg' %}" alt=""></button>
+             </form>
              <hr />
  
              <ul class="flex-col no-style no-deco">

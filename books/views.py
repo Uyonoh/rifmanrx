@@ -95,7 +95,7 @@ def make_rows(queryset: models.QuerySet) -> dict:
 
     return rows
 
-def make_month(opening_cash: int=0, opening_stock: int=0, closing_cash: int=0, closing_stock: int=0, opening_date: tz.datetime=None) -> None:
+def make_month(opening_cash: int=0, opening_stock: int=0, opening_date: tz.datetime=None) -> None:
     """ Creste a new bussiness month """
 
     if not opening_date:
@@ -103,8 +103,6 @@ def make_month(opening_cash: int=0, opening_stock: int=0, closing_cash: int=0, c
     month = BusinessMonth(
         opening_cash=opening_cash,
         opening_stock=opening_stock,
-        closing_cash=closing_cash,
-        closing_stock=closing_stock,
         opening_date=opening_date,
     )
 
@@ -118,6 +116,9 @@ def view_months(request, pk: int=None):
     if months.count() < 1:
         make_month()
         return HttpResponseRedirect(reverse("books:view"))
+    
+    if list(months)[-1].opening_date.month != tz.now().date().month:
+        list(months)[-1].close()
 
     return render(request, "books/view.html", {"months": months})
 

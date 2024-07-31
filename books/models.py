@@ -218,18 +218,19 @@ class BusinessMonth(models.Model):
         balance = self.opening_stock + bought - sold
         return balance
 
-    def calculate_margin(self,opening: tz.datetime=None, closing: tz.datetime=tz.now(), commit: bool=True) -> float:
+    def calculate_margins(self,opening: tz.datetime=None, closing: tz.datetime=tz.now(), commit: bool=True) -> float:
         if not closing:
             closing = self.closing_date
         if not closing:
             closing = tz.now()
 
-        margin = self.get_sales_price(opening=opening, closing=closing) - self.get_costs_price(opening=opening, closing=closing)
-        print(self.get_sales_price(opening=opening, closing=closing))
-        print(self.get_costs_price(opening=opening, closing=closing))
-        # self.margin = margin
+        #: int: Margin on drugs sold
+        sale_margin = self.get_sales_price(opening=opening, closing=closing) - self.get_costs_price(opening=opening, closing=closing)
 
-        return margin
+        #: int Margin on debits and credits
+        margin = self.get_credits_price(opening=opening, closing=closing) - self.get_debits_price(opening=opening, closing=closing)
+
+        return margin, sale_margin
 
     def close(self, dates: str=None) -> None:
         """ Close the accounts for a month """
@@ -241,15 +242,24 @@ class BusinessMonth(models.Model):
         if dates:
             try:
                 y, m, d = dates.split("-")
+                closing = tz.datetime(int(y), int(m), int(d))
+                self.closing_date = closing.date()
             except Exception:
-                raise ValueError(f"Invalid date: Date must be in the format 'yyyy-mm-dd'")
+                raise ValueError(f"Invalid date: Date must be in the format 'yyyy-mm-dd' with no preceding zeros (01)")
 
-            self.calculate_margin()
-            self.save()
+            # self.calculate_margins()
+        self.save()
     
     @property
     def margin(self) -> int:
-        return self.calculate_margin(closing=None)
+        """ Margin based on credits and debits """
+
+        return self.calculate_margins(closing=None)[0]
+
+    def sale_margin(self) -> int:
+        """ Margin on sales """
+
+        return self.calculate_margins(closing=None)[1]
 
     def __str__(self):
         return f"Bussiness month from {self.opening_date} to {self.closing_date}"

@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", default='django-insecure-g-f+i$mu!**f5_*3b1meex@jf!q9n7y*ha&yjx%+p%bxae3$dy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", default=True)
+DEBUG = os.environ.get("DEBUG") == "True"
+
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
@@ -88,14 +89,14 @@ WSGI_APPLICATION = 'rifmanrx.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
-if DEBUG:
+if not DEBUG:
 	DATABASES = {
 		"default": {
 			"ENGINE": "django.db.backends.mysql",
@@ -111,14 +112,17 @@ if DEBUG:
     }
 	
 else:
+    user = os.environ.get("DBUSER")
     password = os.environ.get("DBPASS")
+    port = os.environ.get("DBPORT")
+	
     DATABASES = {
 		"default": {
 			"ENGINE": "django.db.backends.mysql",
 			"HOST": "mysql-rifmandb-rifmanrx.c.aivencloud.com",
-			"PORT": 10535,
+			"PORT": port,
 			"NAME": "defaultdb", 
-			"USER": "avnadmin",
+			"USER": user,
 			"PASSWORD": password,
 			"CHARSET": "utf8mb4",
         }

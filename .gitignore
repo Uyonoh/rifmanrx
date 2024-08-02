@@ -163,9 +163,5 @@ cython_debug/
 
 # Custom
 env.sh
-<<<<<<< HEAD
 launch.sh
 connect-mysql.py
-=======
-launch.sh
->>>>>>> 1252b07 (add remote mysql)

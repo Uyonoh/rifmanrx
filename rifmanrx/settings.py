@@ -24,8 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", default='django-insecure-g-f+i$mu!**f5_*3b1meex@jf!q9n7y*ha&yjx%+p%bxae3$dy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG") == "True"
-
+DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
@@ -110,19 +109,16 @@ if not DEBUG:
 			"PASSWORD": "root",
         }
     }
-
-else:
-    user = os.environ.get("DBUSER")
-    password = os.environ.get("DBPASS")
-    port = os.environ.get("DBPORT")
 	
+else:
+    password = os.environ.get("DBPASS")
     DATABASES = {
 		"default": {
 			"ENGINE": "django.db.backends.mysql",
 			"HOST": "mysql-rifmandb-rifmanrx.c.aivencloud.com",
-			"PORT": port,
+			"PORT": 10535,
 			"NAME": "defaultdb", 
-			"USER": user,
+			"USER": "avnadmin",
 			"PASSWORD": password,
 			"CHARSET": "utf8mb4",
         }

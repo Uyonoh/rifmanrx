@@ -45,14 +45,18 @@
                 </td>    
             {% endfor %}
                 <td class="mobile-only">
-                    <button class="view-drug rounded" id="{{drug.pk}}">View</button>
+                    <button class="view-drug round" id="{{drug.pk}}">View</button>
                 </td>
             </tr>
             {% endfor %}
         </table>
 
         <!-- <button class="round pointer" type="submit">Add</button> -->
-    
+</section>
+<section class="print flex-c no-deco">
+    <button class="round pointer">
+        <a href="{% url 'drugs:print' %}">Print Drugs</a>
+    </button>
 </section>
 {% endblock %}
 

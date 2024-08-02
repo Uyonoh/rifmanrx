@@ -5,6 +5,10 @@
     width: 80%;
 }
 
-.container {
+.pb-2 {
     padding-bottom: 2rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
 }

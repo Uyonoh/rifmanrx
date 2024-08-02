@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone as tz
 from drugs.models import Drug
+from django.db.models import Q
 
 # Create your models here.
 
@@ -74,7 +75,7 @@ class BusinessMonth(models.Model):
             return True
         return False
 
-    def get_credits(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+    def get_credits(self, opening: tz.datetime=None, closing: tz.datetime=None) -> models.QuerySet:
         """ Get total credits within a timeframe """
 
         if not opening:
@@ -83,13 +84,15 @@ class BusinessMonth(models.Model):
             closing = closing
         else:
             closing = self.closing_date
+        if not closing:
+            closing = tz.now()
 
         credits = Credit.objects.filter(date__gte=opening)
         credits = credits.filter(date__lte=closing)
 
         return credits
 
-    def get_credits_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
+    def get_credits_price(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
         """ Get total price of credits within a timeframe """
 
         credit = 0
@@ -99,7 +102,7 @@ class BusinessMonth(models.Model):
         
         return float(credit)
 
-    def get_debits(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+    def get_debits(self, opening: tz.datetime=None, closing: tz.datetime=None) -> models.QuerySet:
         """ Get total debits within a timeframe """
 
         if not opening:
@@ -108,13 +111,15 @@ class BusinessMonth(models.Model):
             closing = closing
         else:
             closing = self.closing_date
+        if not closing:
+            closing = tz.now()
 
         debits = Debit.objects.filter(date__gte=opening)
         debits = debits.filter(date__lte=closing)
 
         return debits
 
-    def get_debits_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
+    def get_debits_price(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
         """ Get total price of debits within a timeframe """
 
         debit = 0
@@ -124,7 +129,7 @@ class BusinessMonth(models.Model):
 
         return float(debit)
 
-    def get_sales(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+    def get_sales(self, opening: tz.datetime=None, closing: tz.datetime=None) -> models.QuerySet:
         """ Get total sales within a timeframe """
 
         if not opening:
@@ -133,13 +138,16 @@ class BusinessMonth(models.Model):
             closing = closing
         else:
             closing = self.closing_date
+        if not closing:
+            closing = tz.now()
 
+        # sales = Sale.objects.filter(time__date=closing.date())
         sales = Sale.objects.filter(time__gte=opening)
         sales = sales.filter(time__lte=closing)
 
         return sales
 
-    def get_sales_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
+    def get_sales_price(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
         """ Get total price of sales within a timeframe """
 
         sale = 0
@@ -149,7 +157,7 @@ class BusinessMonth(models.Model):
 
         return float(sale)
 
-    def get_purchases(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+    def get_purchases(self, opening: tz.datetime=None, closing: tz.datetime=None) -> models.QuerySet:
         """ Get total purchases within a timeframe """
 
         if not opening:
@@ -158,13 +166,15 @@ class BusinessMonth(models.Model):
             closing = closing
         else:
             closing = self.closing_date
+        if not closing:
+            closing = tz.now()
 
         purchases = Purchase.objects.filter(date__gte=opening)
         purchases = purchases.filter(date__lte=closing)
 
         return purchases
 
-    def get_purchases_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
+    def get_purchases_price(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
         """ Get total price of purchases within a timeframe """
 
         purchase = 0
@@ -175,7 +185,7 @@ class BusinessMonth(models.Model):
         return float(purchase)
 
     # Same as get sales; useful?
-    def get_costs(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> models.QuerySet:
+    def get_costs(self, opening: tz.datetime=None, closing: tz.datetime=None) -> models.QuerySet:
         """ Get total costs within a timeframe """
 
         if not opening:
@@ -184,13 +194,15 @@ class BusinessMonth(models.Model):
             closing = closing
         else:
             closing = self.closing_date
+        if not closing:
+            closing = tz.now()
 
         costs = Sale.objects.filter(time__gte=opening)
         costs = costs.filter(time__lte=closing)
 
         return costs
 
-    def get_costs_price(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
+    def get_costs_price(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
         """ Get total cost price of drugs sold within a timeframe """
 
         cost = 0
@@ -200,7 +212,7 @@ class BusinessMonth(models.Model):
         
         return float(cost)
 
-    def balance_cash(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
+    def balance_cash(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
         """ Compute balance on cash """
 
         credits = self.get_credits_price(opening=opening, closing=closing)
@@ -209,7 +221,7 @@ class BusinessMonth(models.Model):
         balance = self.opening_cash + credits - debits
         return balance
 
-    def balance_stock(self, opening: tz.datetime=None, closing: tz.datetime=tz.now()) -> float:
+    def balance_stock(self, opening: tz.datetime=None, closing: tz.datetime=None) -> float:
         """ Compute balance on stock """
 
         bought = self.get_purchases_price(opening=opening, closing=closing)
@@ -218,7 +230,7 @@ class BusinessMonth(models.Model):
         balance = self.opening_stock + bought - sold
         return balance
 
-    def calculate_margins(self,opening: tz.datetime=None, closing: tz.datetime=tz.now(), commit: bool=True) -> float:
+    def calculate_margins(self,opening: tz.datetime=None, closing: tz.datetime=None, commit: bool=True) -> float:
         if not closing:
             closing = self.closing_date
         if not closing:

@@ -6,6 +6,9 @@ table, tr, th, td {
 	border: 1px solid #4a7420;
 }
 
+.align-n {
+	align-items: normal;
+}
 /* tr.exp-far {
 	background-color: green;
 	color: white;

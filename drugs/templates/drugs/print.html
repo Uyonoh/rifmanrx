@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+</head>
+<style>
+    body {
+        background-color: white;
+    }
+
+    section {
+        padding: 0;
+        margin: 5px;
+        width: fit-content;
+    }
+
+    table {
+        border-spacing: 2.2rem;
+    }
+
+    td {
+        border-bottom: 1px solid black;
+    }
+    .full {
+        width: 100%;
+    }
+</style>
+<body>
+
+
+<section class="table overflow align-n">
+    <div class="text-center full">
+        <h1>STOCK AS AT {{today}}</h1>
+    </div>
+    <table class="drugs">
+        <thead>
+            {% for head in drugs.0.table_head %}
+            {% if head != "expired" and head != "Out of stock" %}
+            <th>{{head.upper}}</th>
+            {% endif %}
+            {% endfor %}
+        </thead>
+        {% for drug in drugs %}
+        <tr class="drug {{drug.exp_class}}" id="{{drug.pk}}">
+        {% for head, field in drug.tabulate %}
+        {% if head != "expired" and head != "Out of stock" %}
+
+            <td class="drug-field {{head}}" id="{{head}}">
+                {{field}}
+            </td>    
+        {% endif %}
+        {% endfor %}
+            
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="books text-center">
+        <p><b>Total Available Stock Price:</b> {{stock_price}}</p>
+    </div>
+</section>
+
+
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils import timezone as tz
 from .models import Drug, Tablet, Suspension, Injectable
 from .forms import DrugForm
 from books.forms import SaleForm
@@ -25,6 +26,14 @@ def view_drug(request, pk):
     drug = Drug.objects.filter(pk=pk).values()[0] # A dict
 
     return render(request, "drugs/view-drug.html", {"drug": drug})
+
+def print_stock(request):
+
+    drugs = list(Drug.objects.all())
+    today = tz.now().date()
+    stock_price = 100.00
+
+    return render(request, "drugs/print.html", {"drugs": drugs, "today": today, "stock_price": stock_price})
 
 def add_tab(request, form: DrugForm) -> Drug:
     """ Add a tablet drug """

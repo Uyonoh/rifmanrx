@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-<section class="container flex-col pb-3">
+<section class="container flex-col pb-2 mb-1">
     <h1>Overview: {{month.0}}</h1>
 
-    <div class="flex-col">
+    <div class="flex-col mb-1">
         {% for item, val in month.values.0.items %}
         <p>
             <b>{{item}}: </b>

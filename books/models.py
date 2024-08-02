@@ -40,6 +40,20 @@ class Sale(models.Model):
         item_set.sell(self.amount)
         return super(Sale, self).save(*args, **kwargs)
 
+    def rank(self, interval: int=30) -> list[Drug]:
+        """  Rank drugs based on number of sales
+        Params:
+            interval: number of previous days to consider  """
+
+        pass
+
+    def top10(self, interval: int=30) -> str:
+        """ Return top 10 drugs sold
+        Params:
+            interval: number of previous days to consider """
+
+        pass
+
     def __str__(self) -> str:
         return f"Sale of {self.amount} {self.drug.name}(s)"
 

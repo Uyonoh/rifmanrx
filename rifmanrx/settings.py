@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", default='django-insecure-g-f+i$mu!**f5_*3b1meex@jf!q9n7y*ha&yjx%+p%bxae3$dy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
+DEBUG = os.environ.get("DEBUG", default=True)
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
@@ -102,11 +103,14 @@ if DEBUG:
 			"OPTIONS": {
                 "read_default_file": "/etc/mysql/my.conf",
             },
+			"HOST": "localhost",
+			"PORT": "8080",
 			"NAME": "rxdb", 
 			"USER": "root",
 			"PASSWORD": "root",
         }
     }
+	
 
 
 # Password validation

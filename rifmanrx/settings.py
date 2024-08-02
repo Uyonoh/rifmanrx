@@ -95,6 +95,19 @@ DATABASES = {
     }
 }
 
+if DEBUG:
+	DATABASES = {
+		"default": {
+			"ENGINE": "django.db.backends.mysql",
+			"OPTIONS": {
+                "read_default_file": "/etc/mysql/my.conf",
+            },
+			"NAME": "rxdb", 
+			"USER": "root",
+			"PASSWORD": "root",
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

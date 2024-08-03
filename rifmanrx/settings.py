@@ -110,7 +110,7 @@ if not DEBUG:
 			"PASSWORD": "root",
         }
     }
-	
+
 else:
     user = os.environ.get("DBUSER")
     password = os.environ.get("DBPASS")

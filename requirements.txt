@@ -1,11 +1,16 @@
 asgiref==3.8.1
 attr==0.3.2
 Brotli==1.1.0
+cffi==1.16.0
 crispy-bootstrap4==2024.1
+cryptography==43.0.0
 Django==5.0.6
 django-crispy-forms==2.2
+mysqlclient==2.2.4
 numpy==2.0.1
 pandas==2.2.2
+pycparser==2.22
+PyMySQL==1.1.1
 python-dateutil==2.9.0.post0
 pytz==2024.1
 six==1.16.0

@@ -6,7 +6,7 @@ from .models import Drug, Tablet, Suspension, Injectable
 from .forms import DrugForm
 from books.forms import SaleForm
 from books.views import add_credits, add_debits, add_purchase
-from .utils import drug_from_csv
+from .utils import drug_from_csv, total_price
 
 # Create your views here.
 
@@ -31,7 +31,7 @@ def print_stock(request):
 
     drugs = list(Drug.objects.all())
     today = tz.now().date()
-    stock_price = 100.00
+    stock_price = total_price()
 
     return render(request, "drugs/print.html", {"drugs": drugs, "today": today, "stock_price": stock_price})
 

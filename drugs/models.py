@@ -234,6 +234,19 @@ class Drug(models.Model):
         if self.state == "Injectable":
             return self.injectable_set.all()[0]
         return False
+
+    def total_price():
+        """ Return total price of all drugs in stock """
+
+        drugs = Drug.objects.all()
+        amount = 0
+        price = 0
+
+        for drug in drugs:
+            amount += drug.clean_stock()
+            price += drug.price
+
+        return price * amount
     
     def __str__(self) -> str:
         return f" {self.name}: A drug for {self.purpose} located at {self.location}.\

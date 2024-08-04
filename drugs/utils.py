@@ -97,3 +97,14 @@ def drug_from_csv(path: str) -> None:
         add_purchase(drug, drug.purchase_amount, float(request.POST.get("cost_price")))
         add_debits(request, form)
     print("="*28 + " Finished " + "="*28)
+
+def total_price() -> float:
+        """ Return total price of all drugs in stock """
+
+        drugs = Drug.objects.all()
+        price = 0
+
+        for drug in drugs:
+            price += float(drug.price) * float(drug.clean_stock())
+
+        return price

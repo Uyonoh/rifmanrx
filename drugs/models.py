@@ -38,7 +38,7 @@ class Drug(models.Model):
         days = diff.days
         return days
     
-    def clean_stock(self) -> int | str:
+    def clean_stock(self) -> int | float:
         """ Cleans stock for tablets
          
           Recalculate stock for tablets based on its' number
@@ -52,9 +52,6 @@ class Drug(models.Model):
             cd, tab = int(cd), int(tab)
 
             amount = self.stock_amount / tab
-
-            if amount < 1:
-                amount = str(self.stock_amount) + "tab(s)"
 
             return amount
 
@@ -178,6 +175,23 @@ class Drug(models.Model):
         self.validate_stock_amount(amount)
         self.save(first_stock=False, sale=True)
 
+    def string_stock(self) -> str:
+        amount = self.clean_stock()
+
+        if amount < 1:
+            amount = str(self.stock_amount) + "tab(s)"
+        elif amount % 1 != 0:
+            whole = amount // 1
+            rem = amount % 1
+
+            if self.state == "Tab":
+                rem *= int(self.get_item_set().get_cd_tab()[1])
+                rem = int(round(rem, 1))
+
+            amount = str(whole) + "Cd(s), " + str(rem) + "tab(s)"
+        
+        return str(amount)
+
     def table_head(self) -> tuple:
         return ("name", "brand name", "state", "mass", "manufacturer", "Expirery date", "stock", "price",
                 "category", "Out of stock", "expired")
@@ -190,7 +204,7 @@ class Drug(models.Model):
             self.table_head(),
             (
                 self.name, self.brand_name, self.state, self.mass, self.manufacturer, self.exp_date,
-                self.clean_stock(), self.price, self.category, self.oos, self.expired
+                self.string_stock(), self.price, self.category, self.oos, self.expired
             )
         )
 
@@ -439,7 +453,7 @@ class Suspension(models.Model):
 
         return price
     
-    def sell(self, amount: int, units: str="units", is_tab: bool=False) -> None:
+    def sell(self, amount: int, units: str="units", **kwargs) -> None:
         """ Sell tablet """
 
         if units == "Packets":
@@ -524,7 +538,7 @@ class Injectable(models.Model):
 
         return price
     
-    def sell(self, amount: int, units: str="units", is_tab: bool=False) -> None:
+    def sell(self, amount: int, units: str="units", **kwargs) -> None:
         """ Sell tablet """
 
         if units == "Packets":

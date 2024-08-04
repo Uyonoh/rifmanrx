@@ -37,7 +37,9 @@ class Sale(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         item_set = self.drug.get_item_set() # Itemset is currently ony a single (first) item
-        item_set.sell(self.amount)
+        is_tab = kwargs.get("is_tab")
+        del kwargs["is_tab"]
+        item_set.sell(amount=self.amount, is_tab=is_tab)
         return super(Sale, self).save(*args, **kwargs)
 
     def rank(self, interval: int=30) -> list[Drug]:

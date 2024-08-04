@@ -175,13 +175,15 @@ def restock(request, pk):
     return render(request, "drugs/add-drug.html", {"form": form})
 
 def sell(request, pk):
+    """ Sell a drug """
 
     if request.method == "POST":
         form = SaleForm(request.POST)
 
         if form.is_valid():
             try:
-                form.save()
+                is_tab = request.POST.get("tab") == "tab"
+                form.save(is_tab=is_tab)
                 add_credits(request, form)
             except ValueError as e:
                 form.add_error("amount", e)
@@ -198,7 +200,11 @@ def sell(request, pk):
     form["amount"].initial = 1
     form.set_classes(drug)
 
-    return render(request, "drugs/sell.html", {"form": form})
+    tab_price = None
+    if drug.state == "Tab":
+        tab_price = drug.price / int(drug.get_item_set().get_cd_tab()[1])
+
+    return render(request, "drugs/sell.html", {"form": form, "tab_price": tab_price})
 
 def edit(request, pk):
     return render(request, "drugs/add.html", {"form": "form"})

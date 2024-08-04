@@ -31,7 +31,7 @@
                 {{field}}
             </div>
             {% endfor %}
-
+            <input type="hidden" name="tab-price" id="tab-price" value="{{tab_price}}">
         </div>
         
 
@@ -46,7 +46,10 @@
     const drugHandle = document.querySelector("#id_drug");
     const priceHandle = document.querySelector("#id_price");
     const amountHandle = document.querySelector("#id_amount");
-    const basePrice = priceHandle.value;
+    const unitPrice = priceHandle.value
+    let basePrice = unitPrice;
+    const tabPriceHandle =  document.querySelector("#id_tab");
+    const tabPrice = document.querySelector("#tab-price").value;
 
     function updateSale() {
         pk = drugHandle.selectedOptions[0].value;
@@ -61,7 +64,17 @@
         priceHandle.value = price;
     }
 
+    function toggleTab() {
+        if (tabPriceHandle.value == "tab") {
+            basePrice = tabPrice;
+        } else {
+            basePrice = unitPrice;
+        }
+        updatePrice()
+    }
+
     drugHandle.addEventListener("change", updateSale);
     amountHandle.addEventListener("change", updatePrice);
+    tabPriceHandle.addEventListener("change", toggleTab);
 </script>
 {% endblock %}
